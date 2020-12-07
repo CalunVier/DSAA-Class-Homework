@@ -5,8 +5,13 @@
 #ifndef WEEK3_OBJECTS_H
 #define WEEK3_OBJECTS_H
 
-typedef float OBJECT;
 
+struct charAttributeSearchTreeNode;
+typedef struct charAttributeSearchTreeNode charAttributeSearchTree;
+typedef charAttributeSearchTree * charAttributeSearchTreePtr;
+
+typedef float OBJECT;   //todo 等待弃用
+struct ObjectSTU;
 typedef struct ObjectSTU Object_obj;
 typedef Object_obj * Object;
 
@@ -18,21 +23,20 @@ struct ObjectSTU{
     int (* free) (Object);
     void * (* getAttributePoint)(char *);
     void * (* getFunctionPoint)(char *);
-    void * data;     //Attributes and Functions;
+    charAttributeSearchTreePtr data;     //Attributes and Functions;
 };
 
+int addAttributeName(struct ObjectSTU * object, const char * name, void * ptr);
+void * getAttributePoint(charAttributeSearchTreePtr tree, const char *name);
 
-struct ObjectSTU;
-typedef struct FloatSTU Float_obj;
-typedef Float_obj * Float;
+
+//typedef struct FloatSTU Float_obj;
+typedef Object Float;
 Float floatInit();
 
 
-struct StringSTU;
-typedef struct StringSTU String;
+//struct StringSTU;
+typedef Object String;
 
-struct charAttributeSearchTreeNode;
-typedef struct charAttributeSearchTreeNode charAttributeSearchTree;
-typedef charAttributeSearchTree * charAttributeSearchTreePtr;
 
 #endif //WEEK3_OBJECTS_H
