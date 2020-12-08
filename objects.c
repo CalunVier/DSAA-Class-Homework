@@ -37,6 +37,18 @@ void * getFunctionPoint(Object object, const char * name){
 }
 
 
+/** Objects
+ * The init function of Object contains two parts:
+ * ObjectInit(Object, object)
+ * newObject[_from](Object object, ...)
+ *   The ObjectsInit function used to build essential interface of an object.
+ * but not create any space in memory. The extends action will be processed
+ * in this function. You can call the ObjectInit of super class to build the
+ * super interface.
+ *   The newObject[_from](Object object, ...) used to create a new Object example,
+ * which will create space in memory (usually in first line), and call ObjectInit
+ * function (usually in second line).
+ * */
 Object objectInit()
 {
     Object obj = malloc(sizeof(struct ObjectSTU));
