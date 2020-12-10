@@ -21,9 +21,9 @@ typedef CharAttributeSearchTree * CharAttributeSearchTreePtr;
 
 
 CharAttributeSearchTreePtr CharTree_createNode(char value);
-inline CharAttributeSearchTreePtr CharTree_searchSibling(CharAttributeSearchTreePtr tree, char value);
-inline void CharTree_addAsSibling(CharAttributeSearchTreePtr node, CharAttributeSearchTreePtr newNode);
-inline CharAttributeSearchTreePtr CharTree_addStr(CharAttributeSearchTreePtr tree, const char * name);
-inline CharAttributeSearchTreePtr CharTree_getCTN(CharAttributeSearchTreePtr tree, const char * name);
+CharAttributeSearchTreePtr CharTree_searchSibling(CharAttributeSearchTreePtr tree, char value);
+void CharTree_addAsSibling(CharAttributeSearchTreePtr node, CharAttributeSearchTreePtr newNode);
+CharAttributeSearchTreePtr CharTree_addStr(CharAttributeSearchTreePtr tree, const char * name);
+CharAttributeSearchTreePtr CharTree_getCTN(CharAttributeSearchTreePtr tree, const char * name);
 
 #endif //WEEK3_CHAR_SEARCH_TREE_H

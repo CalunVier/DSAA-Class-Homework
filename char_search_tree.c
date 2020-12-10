@@ -17,7 +17,7 @@ CharAttributeSearchTreePtr CharTree_createNode(char value) {
 }
 
 
-inline CharAttributeSearchTreePtr CharTree_searchSibling(CharAttributeSearchTreePtr tree, char value){
+CharAttributeSearchTreePtr CharTree_searchSibling(CharAttributeSearchTreePtr tree, char value){
     while (tree != NULL) {
         if(tree->value == value) return tree;
         else tree = tree->nextSibling;
@@ -26,7 +26,7 @@ inline CharAttributeSearchTreePtr CharTree_searchSibling(CharAttributeSearchTree
 }
 
 
-inline void CharTree_addAsSibling(CharAttributeSearchTreePtr node, CharAttributeSearchTreePtr newNode){
+void CharTree_addAsSibling(CharAttributeSearchTreePtr node, CharAttributeSearchTreePtr newNode){
     if (node == NULL) return;
     while (node->nextSibling != NULL) {
         node = node->nextSibling;
@@ -35,7 +35,7 @@ inline void CharTree_addAsSibling(CharAttributeSearchTreePtr node, CharAttribute
 }
 
 
-inline CharAttributeSearchTreePtr CharTree_addStr(CharAttributeSearchTreePtr tree, const char * name)
+CharAttributeSearchTreePtr CharTree_addStr(CharAttributeSearchTreePtr tree, const char * name)
 {
     int i;
     CharAttributeSearchTreePtr node = tree, tempNode;
@@ -63,7 +63,7 @@ inline CharAttributeSearchTreePtr CharTree_addStr(CharAttributeSearchTreePtr tre
 }
 
 
-inline CharAttributeSearchTreePtr CharTree_getCTN(CharAttributeSearchTreePtr tree, const char * name)
+CharAttributeSearchTreePtr CharTree_getCTN(CharAttributeSearchTreePtr tree, const char * name)
 {
     int i = 0;
     CharAttributeSearchTreePtr node = tree, tempNode;
