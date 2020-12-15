@@ -7,7 +7,7 @@
 #define WEEK3_QUEUE_H
 
 
-struct QueueRecord
+struct ArrayQueueRecord
 {
     int HEAD;
     int REAR;
@@ -15,14 +15,28 @@ struct QueueRecord
     int MAX_LENGTH;
     OBJECT *OBJECTS;
 };
-typedef struct QueueRecord *Queue;
-//typedef struct QueueRecord QueueRecord;
-Queue newQueue(int max_lenght);
-Queue newQueueFromArray(OBJECT *a, int lenght, int max_lenght);
-void printQueue(Queue q);
-int addObjToQueue(Queue q, OBJECT obj);
-int deleteObjFromQueue(Queue q);
-int indexObjFormQueue(Queue q, OBJECT obj);
-OBJECT getFromQueue(Queue q, int index);
+typedef struct ArrayQueueRecord *ArrayQueue;
+//typedef struct ArrayQueueRecord ArrayQueueRecord;
+ArrayQueue newArrayQueue(int max_lenght);
+ArrayQueue newArrayQueueFromArray(OBJECT *a, int lenght, int max_lenght);
+void ArrayQueue_print(ArrayQueue q);
+int ArrayQueue_add(ArrayQueue q, OBJECT obj);
+int ArrayQueue_pop(ArrayQueue q);
+int ArrayQueue_index(ArrayQueue q, OBJECT obj);
+OBJECT ArrayQueue_get(ArrayQueue q, int index);
+
+
+struct STUListQueue;
+typedef struct STUListQueue *ListQueue;
+ListQueue newListQueue();
+ListQueue newListQueueFromArray(void * array, int data_size, int length);
+int ListArray_add(ListQueue q, void * obj);
+int ListQueue_insert(ListQueue q, void * obj, int index);
+int ListArray_index(ListQueue q, void * obj, int data_size);
+int ListArray_delete(ListQueue q, int index);
+void ListQueue_pop(ListQueue q);
+void * ListQueue_head(ListQueue q);
+void * ListQueue_get(ListQueue q, int index);
+void * ListQueue_free(ListQueue q);
 
 #endif //WEEK3_QUEUE_H

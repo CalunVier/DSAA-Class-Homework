@@ -7,9 +7,9 @@
 #include <stdio.h>
 
 
-Queue newQueue(int max_lenght)
+ArrayQueue newArrayQueue(int max_lenght)
 {
-    Queue q = (Queue) malloc(sizeof(struct QueueRecord));
+    ArrayQueue q = (ArrayQueue) malloc(sizeof(struct ArrayQueueRecord));
     q->MAX_LENGTH = max_lenght;
     q->HEAD = 0;
     q->REAR = -1;
@@ -19,12 +19,12 @@ Queue newQueue(int max_lenght)
 }
 
 
-Queue newQueueFromArray(OBJECT *a, int lenght, int max_lenght)
+ArrayQueue newArrayQueueFromArray(OBJECT *a, int lenght, int max_lenght)
 {
     if(max_lenght>=lenght){
-        Queue q = newQueue(max_lenght);
+        ArrayQueue q = newArrayQueue(max_lenght);
         int i;
-        for(i=0;i<lenght;++i) addObjToQueue(q, *(a+i));
+        for(i=0;i<lenght;++i) ArrayQueue_add(q, *(a + i));
         return q;
     }else{
         return NULL;
@@ -32,10 +32,10 @@ Queue newQueueFromArray(OBJECT *a, int lenght, int max_lenght)
 }
 
 
-void printQueue(Queue q)
+void ArrayQueue_print(ArrayQueue q)
 {
     int i;
-    printf("Information of Queue:\nHEAD:%d\nREAR:%d\nLENGHT:%d\nMAX_LENGHT:%d\nOBJECTS:[", q->HEAD, q->REAR, q->LENGTH, q->MAX_LENGTH);
+    printf("Information of ArrayQueue:\nHEAD:%d\nREAR:%d\nLENGHT:%d\nMAX_LENGHT:%d\nOBJECTS:[", q->HEAD, q->REAR, q->LENGTH, q->MAX_LENGTH);
     for(i=q->HEAD;i<=q->REAR; ++i)
     {
         if(i-q->HEAD) printf(", ");
@@ -45,7 +45,7 @@ void printQueue(Queue q)
     putchar('\n');
 }
 
-int addObjToQueue(Queue q, OBJECT obj)
+int ArrayQueue_add(ArrayQueue q, OBJECT obj)
 {
     if(q->LENGTH < q->MAX_LENGTH)
     {
@@ -61,7 +61,7 @@ int addObjToQueue(Queue q, OBJECT obj)
 }
 
 
-int deleteObjFromQueue(Queue q)
+int ArrayQueue_pop(ArrayQueue q)
 {
     if(q->LENGTH)
     {
@@ -69,13 +69,13 @@ int deleteObjFromQueue(Queue q)
         --q->LENGTH;
         return 0;
     }else{
-        printf("ERROR: There is an empty Queue!");
+        printf("ERROR: There is an empty ArrayQueue!");
         return 1;
     }
     return -1;
 }
 
-int indexObjFormQueue(Queue q, OBJECT obj)
+int ArrayQueue_index(ArrayQueue q, OBJECT obj)
 {
     int i;
     for(i=q->HEAD;i<=q->REAR; ++i)
@@ -85,7 +85,7 @@ int indexObjFormQueue(Queue q, OBJECT obj)
     return -1;
 }
 
-OBJECT getFromQueue(Queue q, int index)
+OBJECT ArrayQueue_get(ArrayQueue q, int index)
 {
     return *(q->OBJECTS+((q->HEAD+index) % q->MAX_LENGTH));
 }
