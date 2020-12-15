@@ -32,11 +32,15 @@ ListQueue newListQueue();
 ListQueue newListQueueFromArray(void * array, int data_size, int length);
 int ListArray_add(ListQueue q, void * obj);
 int ListQueue_insert(ListQueue q, void * obj, int index);
-int ListArray_index(ListQueue q, void * obj, int data_size);
+int ListArray_index(ListQueue q, void * obj);
 int ListArray_delete(ListQueue q, int index);
-void ListQueue_pop(ListQueue q);
+int ListQueue_pop(ListQueue q);
 void * ListQueue_head(ListQueue q);
 void * ListQueue_get(ListQueue q, int index);
-void * ListQueue_free(ListQueue q);
+int ListQueue_free(ListQueue q);
+int ListQueue_find(ListQueue q, void * obj);
+int ListQueue_bfind(ListQueue q, void * obj, int byte_size);
+int ListQueue_isBlank(ListQueue q);
+int ListQueue_len(ListQueue q);
 
 #endif //WEEK3_QUEUE_H

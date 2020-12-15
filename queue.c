@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "queue.h"
 #include <stdio.h>
+#include "list.h"
 
 
 ArrayQueue newArrayQueue(int max_length)
@@ -88,4 +89,88 @@ int ArrayQueue_index(ArrayQueue q, OBJECT obj)
 OBJECT ArrayQueue_get(ArrayQueue q, int index)
 {
     return *(q->OBJECTS+((q->HEAD+index) % q->MAX_LENGTH));
+}
+
+
+//ListQueue
+struct STUListQueue{
+    ObjList list;
+};
+
+
+ListQueue newListQueue(){
+    ObjList l = newObjList();
+    ListQueue lq = malloc(sizeof(struct STUListQueue));
+    lq->list = l;
+    return lq;
+}
+
+
+ListQueue newListQueueFromArray(void * array, int data_size, int length){
+    ObjList l = newObjListFromArray(array, data_size, length);
+    ListQueue lq = malloc(sizeof(struct STUListQueue));
+    lq->list = l;
+    return lq;
+}
+
+
+int ListArray_add(ListQueue q, void * obj){
+    return ObjList_append(q->list, obj);
+}
+
+
+int ListQueue_insert(ListQueue q, void * obj, int index){
+    return ObjList_insert(q->list, obj, index);
+}
+
+
+int ListArray_index(ListQueue q, void * obj){
+    return ObjList_index(q->list, obj);
+}
+
+
+int ListArray_delete(ListQueue q, int index){
+    return ObjList_delete(q->list, index);
+}
+
+
+int ListQueue_pop(ListQueue q){
+    return ObjList_delete(q->list, 0);
+}
+
+
+void * ListQueue_head(ListQueue q){
+    return ObjList_get(q->list, 0);
+}
+
+
+void * ListQueue_get(ListQueue q, int index){
+    return ObjList_get(q->list, index);
+}
+
+
+int ListQueue_free(ListQueue q){
+    ObjList_free(q->list);
+    free(q);
+    return 0;
+}
+
+
+int ListQueue_find(ListQueue q, void * obj){
+    return ObjList_find(q->list, obj);
+}
+
+
+int ListQueue_bfind(ListQueue q, void * obj, int byte_size){
+    return ObjList_bfind(q->list, obj, byte_size);
+}
+
+
+int ListQueue_isBlank(ListQueue q){
+    return ObjList_isBlank(q->list);
+}
+
+
+int ListQueue_len(ListQueue q){
+    return ObjList_len(q->list);
 }
