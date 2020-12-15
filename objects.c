@@ -38,10 +38,13 @@ void * getFunctionPoint(Object object, const char * name){
 
 
 /** Objects
- * The init function of Object contains two parts:
- * ObjectInit(Object, object)
- * newObject[_from](Object object, ...)
- *   The ObjectsInit function used to build essential interface of an object.
+ * The init function of Object contains three parts:
+ *      struct ObjectFuncStu * ObjectInterface(struct ObjectFuncStu * ofs)
+ *      ObjectInit(Object, object)
+ *      newObject[_from](Object object, ...)
+ *   The ObjectInterface() function used to build essential function interface
+ * of an Object.
+ *   The ObjectsInit() function used to build attribute interface of an object.
  * but not create any space in memory. The extends action will be processed
  * in this function. You can call the ObjectInit of super class to build the
  * super interface.
