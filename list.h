@@ -36,4 +36,20 @@ int freeList(List l);
 List newListFromArray(OBJECT * objs, int length);
 int list_index(List l, OBJECT object);
 int printList(List l);
+
+
+//ObjList(Single List)
+struct STUObjList;
+typedef struct STUObjList *ObjList;
+ObjList newObjList();
+ObjList newObjListFromArray(void * array, int byte_size, int length);
+int ObjList_setObjSize(ObjList l, int size);
+int ObjList_append(ObjList l, void * obj);
+int ObjList_insert(ObjList l, void * obj, int index);
+int ObjList_delete(ObjList l, int index);
+int ObjList_index(ObjList l, void * obj);
+int ObjList_bindex(ObjList l, void * obj, int byte_size);
+void * ObjList_get(ObjList l, int index);
+int ObjList_free(ObjList l);
+
 #endif //WEEK3_LIST_H

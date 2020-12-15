@@ -183,3 +183,63 @@ int printList(List l)
     printf("]\n");
     return 0;
 }
+
+
+//ObjList
+/**
+ * The ObjList is designed for any type of data. So, the type of value point is "void *". It's not recommend to store
+ * multiple type value. There is an byte_size attribute in the root of ObjList refer to mark the object size. You can
+ * use setObjSize() to set the default object data size in byte. If you don't do it, the default value of byte_size is
+ * 0.
+ * */
+
+struct STUObjListNode;
+typedef struct STUObjListNode *ObjListNode;
+
+
+struct STUObjListNode{
+    ObjListNode next;
+    void * value;
+};
+
+
+struct STUObjList{
+    ObjListNode head;
+    int byte_size;
+};
+
+
+ObjListNode newObjListNode();
+
+int ObjListNode_link();
+
+int ObjListNode_free();
+
+ObjList newObjList(){}
+
+
+ObjList newObjListFromArray(void * array, int byte_size, int length);
+
+
+int ObjList_setObjSize(ObjList l, int size);
+
+
+int ObjList_append(ObjList l, void * obj);
+
+
+int ObjList_insert(ObjList l, void *obj, int index);
+
+
+int ObjList_delete(ObjList l, int index);
+
+
+int ObjList_index(ObjList l, void * obj);
+
+
+int ObjList_bindex(ObjList l, void * obj, int byte_size);
+
+
+void * ObjList_get(ObjList l, int index);
+
+
+int ObjList_free(ObjList l);
