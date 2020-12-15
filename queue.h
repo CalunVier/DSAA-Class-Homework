@@ -17,7 +17,7 @@ struct ArrayQueueRecord
 };
 typedef struct ArrayQueueRecord *ArrayQueue;
 //typedef struct ArrayQueueRecord ArrayQueueRecord;
-ArrayQueue newArrayQueue(int max_lenght);
+ArrayQueue newArrayQueue(int max_length);
 ArrayQueue newArrayQueueFromArray(OBJECT *a, int lenght, int max_lenght);
 void ArrayQueue_print(ArrayQueue q);
 int ArrayQueue_add(ArrayQueue q, OBJECT obj);

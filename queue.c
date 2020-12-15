@@ -7,14 +7,14 @@
 #include <stdio.h>
 
 
-ArrayQueue newArrayQueue(int max_lenght)
+ArrayQueue newArrayQueue(int max_length)
 {
     ArrayQueue q = (ArrayQueue) malloc(sizeof(struct ArrayQueueRecord));
-    q->MAX_LENGTH = max_lenght;
+    q->MAX_LENGTH = max_length;
     q->HEAD = 0;
     q->REAR = -1;
     q->LENGTH = 0;
-    q->OBJECTS = (OBJECT *)malloc(sizeof(OBJECT)*max_lenght);
+    q->OBJECTS = (OBJECT *)malloc(sizeof(OBJECT) * max_length);
     return q;
 }
 

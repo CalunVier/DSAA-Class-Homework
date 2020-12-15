@@ -229,31 +229,204 @@ int ObjListNode_free(ObjListNode n){
 }
 
 
-ObjList newObjList(){}
+ObjList newObjList(){
+    ObjList l = malloc(sizeof(struct STUObjList));
+    l->head = NULL;
+    l->byte_size = 0;
+    return l;
+}
 
 
-ObjList newObjListFromArray(void * array, int byte_size, int length);
+#define OL_isBlank(l) ((l)->head == NULL ? 1 : 0)
+int ObjList_isBlank(ObjList l){
+    return OL_isBlank(l);
+}
 
 
-int ObjList_setObjSize(ObjList l, int size);
+ObjListNode ObjList_private_getFrontNode(ObjList l, ObjListNode node){
+    ObjListNode tn = l->head;
+    if (l->head == node) return NULL;
+    while(tn->next != NULL)
+        if (tn->next == node) return tn;
+        else tn = tn->next;
+    return NULL;
+}
 
 
-int ObjList_append(ObjList l, void * obj);
+ObjListNode ObjList_private_getNodeHandle(ObjList l, int index){
+    /**/
+    ObjListNode node = l->head;;
+    for (; index > 0; --index) {
+        node = node->next;
+    }
+    return node;
+}
 
 
-int ObjList_insert(ObjList l, void *obj, int index);
+int ObjList_private_objEqual(ObjList l, void * obj_in_list, void * obj, int byte_size){
+    unsigned char *oil = obj_in_list, *o = obj;
+    int i;
+    for (i = 0; i < byte_size; ++i) {
+        if (*oil != *o) {
+            return 0;
+        }
+    }
+    return 1;
+}
 
 
-int ObjList_delete(ObjList l, int index);
+ObjList newObjListFromArray(void * array, int byte_size, int length){
+    ObjList l = newObjList();
+    ObjListNode n = newObjListNode();
+    int i;
+    ObjList_setObjSize(l, byte_size);
+    n->value = array;
+    l->head = n;
+    for (i = 1; i < length; ++i) {
+        n->next = newObjListNode();
+        n = n->next;
+        n->value = array+i;
+    }
+    return l;
+}
 
 
-int ObjList_index(ObjList l, void * obj);
+int ObjList_setObjSize(ObjList l, int size){
+    l->byte_size = size;
+    return 0;
+}
 
 
-int ObjList_bindex(ObjList l, void * obj, int byte_size);
+int ObjList_append(ObjList l, void * obj){
+    ObjListNode node = newObjListNode(), temp;
+    node->value = obj;
+    if (OL_isBlank(l)) {
+        l->head = node;
+    }else{
+        temp = l->head;
+        while(temp->next!=NULL) temp = temp->next;
+        ObjListNode_link(temp, node);
+    }
+    return 0;
+}
 
 
-void * ObjList_get(ObjList l, int index);
+int ObjList_insert(ObjList l, void *obj, int index){
+    ObjListNode node, new_node, tn;
+    if (OL_isBlank(l) && index==0) {
+        return ObjList_append(l, obj);
+    }else{
+        node = l->head;
+        for (; index > 0; --index) {
+            node = node->next;
+            if (node == NULL) return 1;
+        }
+        new_node = newObjListNode();
+        new_node->value = obj;
+        ObjListNode_link(new_node, node);
+        tn = ObjList_private_getFrontNode(l, node);
+        if(tn != NULL){
+            ObjListNode_link(tn, new_node);
+        }else{
+            l->head = new_node;
+        }
+        return 0;
+    }
+}
 
 
-int ObjList_free(ObjList l);
+int ObjList_len(ObjList l){
+    int len = 0;
+    ObjListNode n = l->head;
+    while(n != NULL){
+        n = n->next;
+        ++len;
+    }
+    return len;
+}
+
+
+int ObjList_delete(ObjList l, int index){
+    ObjListNode node = l->head, tn;
+    if(OL_isBlank(l)) return 1;
+    for (; index > 0; --index) {
+        if(node->next != NULL)
+            node = node->next;
+        else return 1;
+    }
+    if(node == l->head)
+        l->head = node->next;
+    else{
+        tn = ObjList_private_getFrontNode(l, node);
+        ObjListNode_link(tn, node->next);
+    }
+    ObjListNode_free(node);
+    return 0;
+}
+
+
+int ObjList_index(ObjList l, void * obj){
+    ObjListNode node;
+    int i;
+    if (!OL_isBlank(l)){
+        node = l->head;
+        for (i = 0; node != NULL; node = node->next,++i) {
+            if(node->value == obj) return i;
+        }
+    }
+    return -1;
+}
+
+
+int ObjList_find(ObjList l, void * obj){
+    return ObjList_bfind(l, obj, l->byte_size);
+}
+
+
+int ObjList_bfind(ObjList l, void * obj, int byte_size){
+    int i;
+    ObjListNode node;
+    if(!OL_isBlank(l)){
+        node = l->head;
+        for (i = 0; node != NULL; node = node->next, ++i) {
+            if (ObjList_private_objEqual(l, node->value, obj, byte_size)) {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+
+void * ObjList_get(ObjList l, int index){
+    ObjListNode node;
+    if(!OL_isBlank(l)){
+        node = l->head;
+        while(index > 0){
+            node = node->next;
+            --index;
+        }
+        return node->value;
+    }
+    return NULL;
+}
+
+
+int ObjList_free(ObjList l){
+    ObjListNode node = l->head, temp;
+    while(node != NULL){
+        temp = node->next;
+        ObjListNode_free(node);
+        node = temp;
+    }
+    return 0;
+}
+//
+//int ObjList_deepFree(ObjList l, int (* obj_free)(void *, ...)){
+//    ObjListNode node = l->head;
+//    while(node != NULL){
+//        obj_free(node->value);
+//        node = node->next;
+//    }
+//    return ObjList_free(l);
+//}

@@ -1,11 +1,11 @@
 //
 // Created by Calun on 2020/10/27.
 //
-#include "objects.h"
+//#include "objects.h"
 
 #ifndef WEEK3_LIST_H
 #define WEEK3_LIST_H
-
+#define OBJECT float
 typedef struct nodeSTU * Node;
 typedef struct listSTU *List;
 
@@ -48,8 +48,12 @@ int ObjList_append(ObjList l, void * obj);
 int ObjList_insert(ObjList l, void * obj, int index);
 int ObjList_delete(ObjList l, int index);
 int ObjList_index(ObjList l, void * obj);
-int ObjList_bindex(ObjList l, void * obj, int byte_size);
+int ObjList_find(ObjList l, void * obj);
+int ObjList_bfind(ObjList l, void * obj, int byte_size);
 void * ObjList_get(ObjList l, int index);
 int ObjList_free(ObjList l);
+int ObjList_isBlank(ObjList l);
+int ObjList_len(ObjList l);
+//int ObjList_deepFree(ObjList l, int (* obj_free)(void *, ...))
 
 #endif //WEEK3_LIST_H

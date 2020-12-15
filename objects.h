@@ -4,7 +4,7 @@
 
 #ifndef WEEK3_OBJECTS_H
 #define WEEK3_OBJECTS_H
-
+#include "char_search_tree.h"
 
 
 typedef float OBJECT;   //todo 等待弃用
