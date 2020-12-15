@@ -209,11 +209,25 @@ struct STUObjList{
 };
 
 
-ObjListNode newObjListNode();
+ObjListNode newObjListNode(){
+    ObjListNode oln = malloc(sizeof(struct STUObjListNode));
+    oln->value = NULL;
+    oln->next = NULL;
+    return oln;
+}
 
-int ObjListNode_link();
 
-int ObjListNode_free();
+int ObjListNode_link(ObjListNode n1, ObjListNode n2){
+    n1->next = n2;
+    return 0;
+}
+
+
+int ObjListNode_free(ObjListNode n){
+    free(n);
+    return 0;
+}
+
 
 ObjList newObjList(){}
 
