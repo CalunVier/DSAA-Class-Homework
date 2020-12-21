@@ -296,11 +296,9 @@ inline void ObjList_private_sortSwap(ObjListNode *n1, ObjListNode *n2) {
 }
 
 
-ObjListNode ObjList_private_qsort_median3(ObjListNode start, ObjListNode end, int (* objCompare)(void *, void *)){
-    int d;
+ObjListNode ObjList_private_qsort_median3(ObjListNode start, ObjListNode end, int distance, int (* objCompare)(void *, void *)){
     ObjListNode n1 = start, n2, n3 = end;
-    d = ObjList_private_nodeDistance(start, end);
-    for (n2 = start, d /= 2; d > 0; --d) {
+    for (n2 = start, distance /= 2; distance > 0; --distance) {
         n2 = n2->next;
     }
     if(objCompare(n1, n2) > 0) ObjList_private_sortSwap(&n1, &n2);
@@ -310,7 +308,14 @@ ObjListNode ObjList_private_qsort_median3(ObjListNode start, ObjListNode end, in
 }
 
 
-void ObjList_private_qsort_(){
+void ObjList_private_qsort_(ObjListNode start, ObjListNode end, int (* objCompare)(void *, void *)){
+    int distance = ObjList_private_nodeDistance(start, end);
+    ObjListNode
+        fronts, behind,
+        center = ObjList_private_qsort_median3(start, end, distance, objCompare);
+    for (behind = start; objCompare(behind, center) <= 0 ; behind = behind->next) {  // find the first
+        if(behind == center) break;
+    }
     // todo wait to implement
 }
 
