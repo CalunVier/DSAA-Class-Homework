@@ -436,4 +436,5 @@ int ObjList_deepFree(ObjList l, int (* obj_free)(void *, ...)){
 
 
 int ObjList_sort(ObjList l, int (* objCompare)(void *, void *)){
+    // todo wait to implement
 }
