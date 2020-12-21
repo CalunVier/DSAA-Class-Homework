@@ -71,7 +71,7 @@ Node private_list_get_node(List l, int index)
 
 OBJECT list_get(List l, int index) {
     Node n = private_list_get_node(l, index);
-    if (n == NULL) return 0;        //object的无效取值问题
+    if (n == NULL) return 0;        //When object is null
     else return n->value;
 }
 
@@ -84,7 +84,7 @@ int list_index(List l, OBJECT object) {
         n = n->next;
         ++i;
     } while (n != l->head);
-    return -1; //找不到
+    return -1; // can not find
 }
 
 int private_list_delete_node(List l, Node n)
@@ -105,7 +105,7 @@ int private_list_delete_node(List l, Node n)
 int list_delete(List l, int index)
 {
     Node n = private_list_get_node(l, index);
-    if(n == NULL) return 1; //空索引
+    if(n == NULL) return 1; // null index
     private_list_delete_node(l, n);
     return 0;
 }
@@ -113,7 +113,7 @@ int list_delete(List l, int index)
 int private_list_insert_node(List l, Node n, int index)
 {
     Node n0;
-    // 空列表
+    // void list
     if(!(l->len) && index == 0){
         l->head = n;
         linkNode(n, n);
@@ -123,7 +123,7 @@ int private_list_insert_node(List l, Node n, int index)
 
     n0 = private_list_get_node(l, index);
     if(n0 == NULL) {
-        return 1; //无效索引
+        return 1; // invalid index
     }
     linkNode(n0->front, n);
     linkNode(n, n0);
@@ -156,6 +156,7 @@ int freeList(List l)
         freeNode(n0);
     }
     free(l);
+    return 0;
 }
 
 List newListFromArray(OBJECT * objs, int length)
@@ -276,16 +277,17 @@ int ObjList_private_objEqual(ObjList l, void * obj_in_list, void * obj, int byte
 
 
 ObjList newObjListFromArray(void * array, int byte_size, int length){
+    char * b = (char *) array;
     ObjList l = newObjList();
     ObjListNode n = newObjListNode();
     int i;
     ObjList_setObjSize(l, byte_size);
-    n->value = array;
+    n->value = b;
     l->head = n;
     for (i = 1; i < length; ++i) {
         n->next = newObjListNode();
         n = n->next;
-        n->value = array+i;
+        n->value = b+i*byte_size;
     }
     return l;
 }

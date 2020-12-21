@@ -6,6 +6,11 @@
 #include <stdlib.h>
 #include <time.h>
 
+/**Create float random numbers
+ * param float a: float Array. Used to save the random number as a container;
+ * param int n: the number that the random number generated;
+ *
+ * */
 void random_float(float *a, int n) {
     int i;
     float temp;
@@ -17,6 +22,11 @@ void random_float(float *a, int n) {
     }
 }
 
+
+/**Copy a float array
+ * like strcpy.
+ * the function will copy the contains form float array a to float array b.
+ * */
 void cp_float_array(const float *a, float *b, int a_length)
 {
     int i;
