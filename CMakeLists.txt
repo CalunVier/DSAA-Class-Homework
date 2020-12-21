@@ -3,4 +3,4 @@ project(week3 C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(week3 main.c queue.c queue.h list.c list.h objects.c objects.h list_queue.c list_queue.h sorts.c sorts.h tools.c tools.h char_search_tree.c char_search_tree.h)
+add_executable(week3 main.c objects/queue.c objects/queue.h objects/list.c objects/list.h objects/objects.c objects/objects.h objects/list_queue.c objects/list_queue.h objects/sorts.c objects/sorts.h calunvier/tools.c calunvier/tools.h objects/char_search_tree.c objects/char_search_tree.h)
