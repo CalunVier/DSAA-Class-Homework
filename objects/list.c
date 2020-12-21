@@ -276,6 +276,45 @@ int ObjList_private_objEqual(ObjList l, void * obj_in_list, void * obj, int byte
 }
 
 
+int ObjList_private_nodeDistance(ObjListNode n1, ObjListNode n2){
+    int d;
+    for (d = 0; n1 != n2; ++d) {
+        n1 = n1->next;
+        if (n1 == NULL) {
+            return -1;
+        }
+    }
+    return d;
+}
+
+
+inline void ObjList_private_sortSwap(ObjListNode *n1, ObjListNode *n2) {
+    ObjListNode temp;
+    temp = *n1;
+    *n1 = *n2;
+    *n2 = temp;
+}
+
+
+ObjListNode ObjList_private_qsort_median3(ObjListNode start, ObjListNode end, int (* objCompare)(void *, void *)){
+    int d;
+    ObjListNode n1 = start, n2, n3 = end;
+    d = ObjList_private_nodeDistance(start, end);
+    for (n2 = start, d /= 2; d > 0; --d) {
+        n2 = n2->next;
+    }
+    if(objCompare(n1, n2) > 0) ObjList_private_sortSwap(&n1, &n2);
+    if(objCompare(n1, n3) > 0) ObjList_private_sortSwap(&n1, &n3);
+    if(objCompare(n2, n3) > 0) ObjList_private_sortSwap(&n2, &n3);
+    return n2;
+}
+
+
+void ObjList_private_qsort_(){
+    // todo wait to implement
+}
+
+
 ObjList newObjListFromArray(void * array, int byte_size, int length){
     char * b = (char *) array;
     ObjList l = newObjList();
@@ -437,4 +476,6 @@ int ObjList_deepFree(ObjList l, int (* obj_free)(void *, ...)){
 
 int ObjList_sort(ObjList l, int (* objCompare)(void *, void *)){
     // todo wait to implement
+    return 0;
 }
+
