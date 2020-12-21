@@ -421,12 +421,17 @@ int ObjList_free(ObjList l){
     }
     return 0;
 }
-//
-//int ObjList_deepFree(ObjList l, int (* obj_free)(void *, ...)){
-//    ObjListNode node = l->head;
-//    while(node != NULL){
-//        obj_free(node->value);
-//        node = node->next;
-//    }
-//    return ObjList_free(l);
-//}
+
+
+int ObjList_deepFree(ObjList l, int (* obj_free)(void *, ...)){
+    ObjListNode node = l->head;
+    while(node != NULL){
+        obj_free(node->value);
+        node = node->next;
+    }
+    return ObjList_free(l);
+}
+
+
+int ObjList_sort(ObjList l, int (* objCompare)(void *, void *)){
+}

@@ -54,6 +54,7 @@ void * ObjList_get(ObjList l, int index);
 int ObjList_free(ObjList l);
 int ObjList_isBlank(ObjList l);
 int ObjList_len(ObjList l);
-//int ObjList_deepFree(ObjList l, int (* obj_free)(void *, ...))
+int ObjList_deepFree(ObjList l, int (* obj_free)(void *, ...));
+int ObjList_sort(ObjList l, int (* objCompare)(void *, void *));
 
 #endif //WEEK3_LIST_H
