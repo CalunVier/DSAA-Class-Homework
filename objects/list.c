@@ -210,6 +210,20 @@ struct STUObjList{
 };
 
 
+/* private functions header */
+ObjListNode ObjList_private_getFrontNode(ObjList l, ObjListNode node);
+ObjListNode ObjList_private_getNodeHandle(ObjList l, int index);
+ObjListNode ObjList_private_pickOutNode(ObjList l, ObjListNode node);
+int ObjList_private_objEqual(ObjList l, void * obj_in_list, void * obj, int byte_size);
+int ObjList_private_nodeDistance(ObjListNode n1, ObjListNode n2);
+static inline void ObjList_private_sortSwap(ObjListNode *n1, ObjListNode *n2);
+ObjListNode ObjList_private_qsort_median3(ObjListNode start, ObjListNode end, int distance, int (* objCompare)(void *, void *));
+void ObjList_private_qsort_(ObjList l, ObjListNode start, ObjListNode end, int (* objCompare)(void *, void *));
+static inline void ObjList_private_appendNode(ObjList l, ObjListNode node);
+static inline void ObjListNode_private_link(ObjListNode n1, ObjListNode n2);
+/* private functions */
+
+
 ObjListNode newObjListNode(){
     ObjListNode oln = malloc(sizeof(struct STUObjListNode));
     oln->value = NULL;
@@ -218,9 +232,8 @@ ObjListNode newObjListNode(){
 }
 
 
-int ObjListNode_link(ObjListNode n1, ObjListNode n2){
+static inline void ObjListNode_private_link(ObjListNode n1, ObjListNode n2){
     n1->next = n2;
-    return 0;
 }
 
 
@@ -255,10 +268,21 @@ ObjListNode ObjList_private_getFrontNode(ObjList l, ObjListNode node){
 
 
 ObjListNode ObjList_private_getNodeHandle(ObjList l, int index){
-    /**/
     ObjListNode node = l->head;;
-    for (; index > 0; --index) {
+    for (; index > 0 && node != NULL; --index) {
         node = node->next;
+    }
+    return node;
+}
+
+
+ObjListNode ObjList_private_pickOutNode(ObjList l, ObjListNode node){
+    ObjListNode front;
+    if(node == l->head)
+        l->head = node->next;
+    else{
+        front = ObjList_private_getFrontNode(l, node);
+        ObjListNode_private_link(front, node->next);
     }
     return node;
 }
@@ -288,7 +312,7 @@ int ObjList_private_nodeDistance(ObjListNode n1, ObjListNode n2){
 }
 
 
-inline void ObjList_private_sortSwap(ObjListNode *n1, ObjListNode *n2) {
+static inline void ObjList_private_sortSwap(ObjListNode *n1, ObjListNode *n2) {
     ObjListNode temp;
     temp = *n1;
     *n1 = *n2;
@@ -308,15 +332,43 @@ ObjListNode ObjList_private_qsort_median3(ObjListNode start, ObjListNode end, in
 }
 
 
-void ObjList_private_qsort_(ObjListNode start, ObjListNode end, int (* objCompare)(void *, void *)){
+void ObjList_private_qsort_(ObjList l, ObjListNode start, ObjListNode end, int (* objCompare)(void *, void *)){
     int distance = ObjList_private_nodeDistance(start, end);
+    ObjList fronts = newObjList(), behind = newObjList();
     ObjListNode
-        fronts, behind,
+        temp = NULL,        // In most case, temp as an operator point.
+        temp2 = NULL,       // In most case, temp as an front point.
         center = ObjList_private_qsort_median3(start, end, distance, objCompare);
-    for (behind = start; objCompare(behind, center) <= 0 ; behind = behind->next) {  // find the first
-        if(behind == center) break;
+
+    temp2 = ObjList_private_getFrontNode(l, start);
+    for (temp = start; temp != center ; temp2 = temp, temp = temp->next) {
+        // find the first node which should insert to the behind of center.
+        if (objCompare(temp, center) <= 0){
+            if (temp2 != NULL){
+                ObjListNode_private_link(temp2, temp->next);
+            }else{
+                ObjList_private_pickOutNode(l, temp);
+            }
+            temp->next = NULL;
+            ObjList_private_appendNode(behind, temp);
+        }
     }
+
     // todo wait to implement
+    free(fronts);
+    free(behind);
+}
+
+
+static inline void ObjList_private_appendNode(ObjList l, ObjListNode node){
+    ObjListNode temp;
+    if (OL_isBlank(l)) {
+        l->head = node;
+    }else{
+        temp = l->head;
+        while(temp->next!=NULL) temp = temp->next;
+        ObjListNode_private_link(temp, node);
+    }
 }
 
 
@@ -344,15 +396,9 @@ int ObjList_setObjSize(ObjList l, int size){
 
 
 int ObjList_append(ObjList l, void * obj){
-    ObjListNode node = newObjListNode(), temp;
+    ObjListNode node = newObjListNode();
     node->value = obj;
-    if (OL_isBlank(l)) {
-        l->head = node;
-    }else{
-        temp = l->head;
-        while(temp->next!=NULL) temp = temp->next;
-        ObjListNode_link(temp, node);
-    }
+    ObjList_private_appendNode(l, node);
     return 0;
 }
 
@@ -369,10 +415,10 @@ int ObjList_insert(ObjList l, void *obj, int index){
         }
         new_node = newObjListNode();
         new_node->value = obj;
-        ObjListNode_link(new_node, node);
+        ObjListNode_private_link(new_node, node);
         tn = ObjList_private_getFrontNode(l, node);
         if(tn != NULL){
-            ObjListNode_link(tn, new_node);
+            ObjListNode_private_link(tn, new_node);
         }else{
             l->head = new_node;
         }
@@ -393,21 +439,9 @@ int ObjList_len(ObjList l){
 
 
 int ObjList_delete(ObjList l, int index){
-    ObjListNode node = l->head, tn;
-    if(OL_isBlank(l)) return 1;
-    for (; index > 0; --index) {
-        if(node->next != NULL)
-            node = node->next;
-        else return 1;
-    }
-    if(node == l->head)
-        l->head = node->next;
-    else{
-        tn = ObjList_private_getFrontNode(l, node);
-        ObjListNode_link(tn, node->next);
-    }
-    ObjListNode_free(node);
-    return 0;
+    ObjListNode node = ObjList_private_getNodeHandle(l, index);
+    node = ObjList_private_pickOutNode(l, node);
+    return ObjListNode_free(node);
 }
 
 
