@@ -221,6 +221,7 @@ ObjListNode ObjList_private_qsort_median3(ObjListNode start, ObjListNode end, in
 void ObjList_private_qsort_(ObjList l, ObjListNode start, ObjListNode end, int (* objCompare)(void *, void *));
 static inline void ObjList_private_appendNode(ObjList l, ObjListNode node);
 static inline void ObjListNode_private_link(ObjListNode n1, ObjListNode n2);
+ObjListNode ObjList_private_getRearNode(ObjList l);
 /* private functions */
 
 
@@ -325,38 +326,121 @@ ObjListNode ObjList_private_qsort_median3(ObjListNode start, ObjListNode end, in
     for (n2 = start, distance /= 2; distance > 0; --distance) {
         n2 = n2->next;
     }
-    if(objCompare(n1, n2) > 0) ObjList_private_sortSwap(&n1, &n2);
-    if(objCompare(n1, n3) > 0) ObjList_private_sortSwap(&n1, &n3);
-    if(objCompare(n2, n3) > 0) ObjList_private_sortSwap(&n2, &n3);
+    if(objCompare(n1->value, n2->value) > 0) ObjList_private_sortSwap(&n1, &n2);
+    if(objCompare(n1->value, n3->value) > 0) ObjList_private_sortSwap(&n1, &n3);
+    if(objCompare(n2->value, n3->value) > 0) ObjList_private_sortSwap(&n2, &n3);
     return n2;
 }
 
 
-void ObjList_private_qsort_(ObjList l, ObjListNode start, ObjListNode end, int (* objCompare)(void *, void *)){
+void ObjList_private_qsort_(ObjList l, ObjListNode start, ObjListNode end, int (* objCompare)(void *, void *)) {
     int distance = ObjList_private_nodeDistance(start, end);
     ObjList fronts = newObjList(), behind = newObjList();
     ObjListNode
-        temp = NULL,        // In most case, temp as an operator point.
-        temp2 = NULL,       // In most case, temp as an front point.
-        center = ObjList_private_qsort_median3(start, end, distance, objCompare);
+            start_front,
+            end_behind,
+            temp = NULL,        // In most case, temp as an operator point.
+            temp2 = NULL,       // In most case, temp as an front point.
+            center;
 
-    temp2 = ObjList_private_getFrontNode(l, start);
-    for (temp = start; temp != center ; temp2 = temp, temp = temp->next) {
-        // find the first node which should insert to the behind of center.
-        if (objCompare(temp, center) <= 0){
-            if (temp2 != NULL){
-                ObjListNode_private_link(temp2, temp->next);
-            }else{
-                ObjList_private_pickOutNode(l, temp);
-            }
-            temp->next = NULL;
-            ObjList_private_appendNode(behind, temp);
-        }
+    start_front = ObjList_private_getFrontNode(l, start);
+
+    if (distance == 0) {
+        free(fronts);
+        free(behind);
+        return;
     }
 
-    // todo wait to implement
+    if (distance == 1) {
+        if (objCompare(start->value, end->value) > 0) {
+            if(start_front != NULL){
+                start_front->next = end;
+                start->next = end->next;
+                end->next = start;
+            }else{
+                l->head = end;
+                start->next = end->next;
+                end->next = start;
+            }
+        }
+        free(fronts);
+        free(behind);
+        return;
+    }
+
+    center = ObjList_private_qsort_median3(start, end, distance, objCompare);
+    temp2 = start_front;
+    temp = start;
+    while (temp != center) {
+        // find the first node which should insert to the behind of center.
+        if (objCompare(temp->value, center->value) > 0) {
+            if (temp2 != NULL) {
+                ObjListNode_private_link(temp2,
+                                         temp->next);    // pickOutNode() will calculate from the head. So we don't use it.
+                temp->next = NULL;
+                ObjList_private_appendNode(behind, temp);
+                temp = temp2->next;
+            } else {
+                ObjList_private_pickOutNode(l, temp);
+                temp->next = NULL;
+                ObjList_private_appendNode(behind, temp);
+                temp = l->head;
+            }
+            continue;
+        }
+        // normal case
+        temp2 = temp;
+        temp = temp->next;
+    }
+
+    temp2 = center;
+    temp = center->next;
+    end_behind = end->next;
+    while (temp != end_behind) {
+        if (objCompare(temp->value, center->value) < 0) {
+            ObjListNode_private_link(temp2,
+                                     temp->next);    // pickOutNode() will calculate from the head. So we don't use it.
+            temp->next = NULL;
+            ObjList_private_appendNode(fronts, temp);
+            temp = temp2->next;
+            continue;
+        }
+        temp2 = temp;
+        temp = temp->next;
+    }
+
+    // insert
+    //front
+    if (!OL_isBlank(fronts)){
+        if(start_front == NULL){
+            ObjList_private_getRearNode(fronts)->next = l->head;
+            l->head = fronts->head;
+        }else{
+            ObjList_private_getRearNode(fronts)->next = start_front->next;
+            start_front->next = fronts->head;
+        }
+    }
+    //behind
+    if (!OL_isBlank(behind))
+    {
+        end = ObjList_private_getRearNode(behind);
+        end->next = center->next;
+        center->next = behind->head;
+    }
     free(fronts);
     free(behind);
+    if (start_front==NULL) start = l->head;
+    else start = start_front->next;
+    if (temp2 != center) end = temp2;
+    ObjList_private_qsort_(l, start, center, objCompare);
+    ObjList_private_qsort_(l, center, end, objCompare);
+}
+
+
+ObjListNode ObjList_private_getRearNode(ObjList l){
+    ObjListNode node = l->head;
+    while(node->next != NULL) node = node->next;
+    return node;
 }
 
 
@@ -483,6 +567,7 @@ void * ObjList_get(ObjList l, int index){
     if(!OL_isBlank(l)){
         node = l->head;
         while(index > 0){
+            if (node == NULL) return NULL;
             node = node->next;
             --index;
         }
@@ -514,7 +599,6 @@ int ObjList_deepFree(ObjList l, int (* obj_free)(void *, ...)){
 
 
 int ObjList_sort(ObjList l, int (* objCompare)(void *, void *)){
-    // todo wait to implement
+    ObjList_private_qsort_(l, l->head, ObjList_private_getRearNode(l), objCompare);
     return 0;
 }
-
