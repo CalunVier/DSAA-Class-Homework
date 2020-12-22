@@ -10,5 +10,7 @@
 
 void random_float(float *a, int n);
 void cp_float_array(const float *a, float *b, int a_length);
+int random_int_range(int min, int max);
+void random_init();
 
 #endif //WEEK3_TOOLS_H

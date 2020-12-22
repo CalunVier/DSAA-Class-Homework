@@ -114,7 +114,7 @@ ListQueue newListQueueFromArray(void * array, int data_size, int length){
 }
 
 
-int ListArray_add(ListQueue q, void * obj){
+int ListQueue_add(ListQueue q, void * obj){
     return ObjList_append(q->list, obj);
 }
 
@@ -124,12 +124,12 @@ int ListQueue_insert(ListQueue q, void * obj, int index){
 }
 
 
-int ListArray_index(ListQueue q, void * obj){
+int ListQueue_index(ListQueue q, void * obj){
     return ObjList_index(q->list, obj);
 }
 
 
-int ListArray_delete(ListQueue q, int index){
+int ListQueue_delete(ListQueue q, int index){
     return ObjList_delete(q->list, index);
 }
 

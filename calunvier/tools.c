@@ -22,6 +22,16 @@ void random_float(float *a, int n) {
     }
 }
 
+void random_init(){
+    srand((unsigned)time(NULL));
+}
+
+
+int random_int_range(int min, int max) {
+    return (rand() % (max-min)) + min;
+
+}
+
 
 /**Copy a float array
  * like strcpy.
