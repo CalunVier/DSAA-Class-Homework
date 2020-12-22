@@ -5,7 +5,7 @@
 
 #ifndef WEEK3_LIST_H
 #define WEEK3_LIST_H
-#define OBJECT float
+typedef float OBJECT;
 typedef struct nodeSTU * Node;
 typedef struct listSTU *List;
 

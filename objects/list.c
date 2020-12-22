@@ -489,7 +489,7 @@ int ObjList_append(ObjList l, void * obj){
 
 int ObjList_insert(ObjList l, void *obj, int index){
     ObjListNode node, new_node, tn;
-    if (OL_isBlank(l) && index==0) {
+    if (ObjList_len(l) == index) {
         return ObjList_append(l, obj);
     }else{
         node = l->head;
@@ -567,8 +567,8 @@ void * ObjList_get(ObjList l, int index){
     if(!OL_isBlank(l)){
         node = l->head;
         while(index > 0){
-            if (node == NULL) return NULL;
             node = node->next;
+            if (node == NULL) return NULL;
             --index;
         }
         return node->value;
