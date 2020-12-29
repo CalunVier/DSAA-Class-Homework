@@ -9,21 +9,23 @@
 
 struct ArrayQueueRecord
 {
-    int HEAD;
-    int REAR;
-    int LENGTH;
-    int MAX_LENGTH;
-    OBJECT *OBJECTS;
+    int head;
+    int length;
+    int max_length;
+    void **value;
 };
 typedef struct ArrayQueueRecord *ArrayQueue;
 //typedef struct ArrayQueueRecord ArrayQueueRecord;
 ArrayQueue newArrayQueue(int max_length);
-ArrayQueue newArrayQueueFromArray(OBJECT *a, int lenght, int max_lenght);
-void ArrayQueue_print(ArrayQueue q);
-int ArrayQueue_add(ArrayQueue q, OBJECT obj);
-int ArrayQueue_pop(ArrayQueue q);
-int ArrayQueue_index(ArrayQueue q, OBJECT obj);
-OBJECT ArrayQueue_get(ArrayQueue q, int index);
+ArrayQueue newArrayQueueFromArray(void *a, int length, int max_length, int byte_size);
+int ArrayQueue_add(ArrayQueue q, void *obj);
+void * ArrayQueue_pop(ArrayQueue q);
+int ArrayQueue_index(ArrayQueue q, void *obj);
+void * ArrayQueue_get(ArrayQueue q, int index);
+int ArrayQueue_len(ArrayQueue q);
+int ArrayQueue_insert(ArrayQueue q, void *obj, int index);
+int ArrayQueue_isBlank(ArrayQueue q);
+void * ArrayQueue_head(ArrayQueue q);
 
 
 struct STUListQueue;
@@ -42,5 +44,7 @@ int ListQueue_find(ListQueue q, void * obj);
 int ListQueue_bfind(ListQueue q, void * obj, int byte_size);
 int ListQueue_isBlank(ListQueue q);
 int ListQueue_len(ListQueue q);
+
+
 
 #endif //WEEK3_QUEUE_H

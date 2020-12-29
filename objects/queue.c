@@ -11,21 +11,20 @@
 ArrayQueue newArrayQueue(int max_length)
 {
     ArrayQueue q = (ArrayQueue) malloc(sizeof(struct ArrayQueueRecord));
-    q->MAX_LENGTH = max_length;
-    q->HEAD = 0;
-    q->REAR = -1;
-    q->LENGTH = 0;
-    q->OBJECTS = (OBJECT *)malloc(sizeof(OBJECT) * max_length);
+    q->max_length = max_length;
+    q->head = 0;
+    q->length = 0;
+    q->value = (void *)malloc(sizeof(void *) * max_length);
     return q;
 }
 
 
-ArrayQueue newArrayQueueFromArray(OBJECT *a, int lenght, int max_lenght)
+ArrayQueue newArrayQueueFromArray(void *a, int length, int max_length, int byte_size)
 {
-    if(max_lenght>=lenght){
-        ArrayQueue q = newArrayQueue(max_lenght);
+    if(max_length>=length){
+        ArrayQueue q = newArrayQueue(max_length);
         int i;
-        for(i=0;i<lenght;++i) ArrayQueue_add(q, *(a + i));
+        for(i=0;i<length;++i) ArrayQueue_add(q, a + i * byte_size);
         return q;
     }else{
         return NULL;
@@ -33,62 +32,92 @@ ArrayQueue newArrayQueueFromArray(OBJECT *a, int lenght, int max_lenght)
 }
 
 
-void ArrayQueue_print(ArrayQueue q)
-{
-    int i;
-    printf("Information of ArrayQueue:\nHEAD:%d\nREAR:%d\nLENGHT:%d\nMAX_LENGHT:%d\nOBJECTS:[", q->HEAD, q->REAR, q->LENGTH, q->MAX_LENGTH);
-    for(i=q->HEAD;i<=q->REAR; ++i)
-    {
-        if(i-q->HEAD) printf(", ");
-        printf("%f", *(q->OBJECTS+ (i%q->MAX_LENGTH)));
+/* ArrayQueue private*/
+static inline int ArrayQueue_private_index2position(ArrayQueue q, int index){
+    if(index >= 0) {
+        return (q->head + index) % q->max_length;
+    }else{
+        return q->max_length - 1 - ((-index-1) % q->max_length);
     }
-    putchar(']');
-    putchar('\n');
 }
 
-int ArrayQueue_add(ArrayQueue q, OBJECT obj)
+/* ArrayQueue private end*/
+
+
+int ArrayQueue_len(ArrayQueue q){
+    return q->length;
+}
+
+
+int ArrayQueue_add(ArrayQueue q, void *obj)
 {
-    if(q->LENGTH < q->MAX_LENGTH)
-    {
-        ++q->REAR;
-        *(q->OBJECTS+(q->REAR % q->MAX_LENGTH)) = obj;
-        ++q ->LENGTH;
+    if(q->length < q->max_length){
+        /* length is 1 greater than index */
+        q->value[(q->head + q->length) % q->max_length] = obj;
+        ++(q->length);
         return 0;
     }else{
-        printf("ERROR: No more memory to add the object!\n");
+        /*ERROR: No more memory to add the object!*/
         return 1;
     }
-    return -1;
 }
 
 
-int ArrayQueue_pop(ArrayQueue q)
+void * ArrayQueue_pop(ArrayQueue q)
 {
-    if(q->LENGTH)
+    void * value = NULL;
+    if(q->length)
     {
-        ++q->HEAD;
-        --q->LENGTH;
+        value = q->value[q->head];
+        q->head = (q->head + 1) % q->max_length;
+        --q->length;
+    }else{
+        /*ERROR: There is an empty ArrayQueue!*/
+    }
+    return value;
+}
+
+int ArrayQueue_index(ArrayQueue q, void *obj)
+{
+    /* todo: need to be fix */
+    int i;
+    return -1;
+}
+
+void * ArrayQueue_get(ArrayQueue q, int index)
+{
+    /* The index is relative index for head, not for value[0]! */
+    if(index < q->length){
+        return q->value[(q->head + index) % q->max_length];
+    }else{
+        return NULL;
+    }
+}
+
+
+int ArrayQueue_insert(ArrayQueue q, void *obj, int index){
+    int p;
+    if (q->length < q->max_length) {
+        p = q->length;
+        for (; p > index; --p) {
+            q->value[ArrayQueue_private_index2position(q, p)] = q->value[ArrayQueue_private_index2position(q, p-1)];
+        }
+        q->value[ArrayQueue_private_index2position(q, index)] = obj;
+        ++q->length;
         return 0;
     }else{
-        printf("ERROR: There is an empty ArrayQueue!");
         return 1;
     }
-    return -1;
 }
 
-int ArrayQueue_index(ArrayQueue q, OBJECT obj)
-{
-    int i;
-    for(i=q->HEAD;i<=q->REAR; ++i)
-    {
-        if(*(q->OBJECTS+ (i%q->MAX_LENGTH)) == obj) return (i - q->HEAD);
-    }
-    return -1;
+
+int ArrayQueue_isBlank(ArrayQueue q){
+    return q->length? 1 : 0;
 }
 
-OBJECT ArrayQueue_get(ArrayQueue q, int index)
-{
-    return *(q->OBJECTS+((q->HEAD+index) % q->MAX_LENGTH));
+
+void * ArrayQueue_head(ArrayQueue q){
+    return ArrayQueue_get(q, 0);
 }
 
 
