@@ -2,6 +2,7 @@
 // Created by Calun on 2020/12/21.
 //
 
+#include "supermarket.h"
 #include "../calunvier/tools.h"
 #include <stdlib.h>
 #include <stdio.h>

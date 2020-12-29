@@ -58,4 +58,25 @@ int ObjList_deepFree(ObjList l, int (* obj_free)(void *, ...));
 int ObjList_sort(ObjList l, int (* objCompare)(void *, void *));
 void * ObjList_toArray(ObjList l);
 
+
+/* ArrayList Part */
+struct ArrayListSTU;
+typedef struct ArrayListSTU *ArrayList;
+ArrayList newArrayList(int byte_size);
+ArrayList newArrayListFromArray(void * array, int byte_size, int length);
+int ArrayList_setObjSize(ArrayList l, int size);
+int ArrayList_append(ArrayList l, void * obj);
+int ArrayList_insert(ArrayList l, void * obj, int index);
+int ArrayList_delete(ArrayList l, int index);
+int ArrayList_index(ArrayList l, void * obj);
+int ArrayList_find(ArrayList l, void * obj);
+int ArrayList_bfind(ArrayList l, void * obj, int byte_size);
+void * ArrayList_get(ArrayList l, int index);
+int ArrayList_free(ArrayList l);
+int ArrayList_isBlank(ArrayList l);
+int ArrayList_len(ArrayList l);
+int ArrayList_deepFree(ArrayList l, int (* obj_free)(void *, ...));
+int ArrayList_sort(ArrayList l, int (* objCompare)(void *, void *));
+void * ArrayList_toArray(ArrayList l);
+
 #endif //WEEK3_LIST_H

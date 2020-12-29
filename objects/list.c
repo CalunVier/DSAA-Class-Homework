@@ -621,3 +621,96 @@ void * ObjList_toArray(ObjList l) {
     }
     return (void *)array;
 }
+
+
+
+/* Array List Part*/
+struct ArrayListSTU{
+    void * array;
+    int len;
+    int allocated;
+    int byte_size;
+};
+
+
+ArrayList newArrayList(int byte_size){
+    ArrayList l = malloc(sizeof(struct ArrayListSTU));
+    l->len= 0;
+    l->allocated = 4;
+}
+
+
+ArrayList newArrayListFromArray(void * array, int byte_size, int length){
+
+}
+
+
+int ArrayList_setObjSize(ArrayList l, int size){
+
+
+}
+
+
+int ArrayList_append(ArrayList l, void * obj){
+
+}
+
+
+int ArrayList_insert(ArrayList l, void * obj, int index){
+
+}
+
+
+int ArrayList_delete(ArrayList l, int index){
+
+}
+
+
+int ArrayList_index(ArrayList l, void * obj){
+
+}
+
+
+int ArrayList_find(ArrayList l, void * obj){
+
+}
+
+
+int ArrayList_bfind(ArrayList l, void * obj, int byte_size){
+
+}
+
+
+void * ArrayList_get(ArrayList l, int index){
+
+}
+
+
+int ArrayList_free(ArrayList l){
+
+}
+
+
+int ArrayList_isBlank(ArrayList l){
+
+}
+
+
+int ArrayList_len(ArrayList l){
+
+}
+
+
+int ArrayList_deepFree(ArrayList l, int (* obj_free)(void *, ...)){
+
+}
+
+
+int ArrayList_sort(ArrayList l, int (* objCompare)(void *, void *)){
+
+}
+
+
+void * ArrayList_toArray(ArrayList l){
+
+}
