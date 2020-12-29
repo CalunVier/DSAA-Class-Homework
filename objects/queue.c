@@ -112,7 +112,7 @@ int ArrayQueue_insert(ArrayQueue q, void *obj, int index){
 
 
 int ArrayQueue_isBlank(ArrayQueue q){
-    return q->length? 1 : 0;
+    return q->length? 0 : 1;
 }
 
 
