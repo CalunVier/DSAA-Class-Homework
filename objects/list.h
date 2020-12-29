@@ -41,7 +41,7 @@ int printList(List l);
 //ObjList(Single List)
 struct STUObjList;
 typedef struct STUObjList *ObjList;
-ObjList newObjList();
+ObjList newObjList(int byte_size);
 ObjList newObjListFromArray(void * array, int byte_size, int length);
 int ObjList_setObjSize(ObjList l, int size);
 int ObjList_append(ObjList l, void * obj);
@@ -56,5 +56,6 @@ int ObjList_isBlank(ObjList l);
 int ObjList_len(ObjList l);
 int ObjList_deepFree(ObjList l, int (* obj_free)(void *, ...));
 int ObjList_sort(ObjList l, int (* objCompare)(void *, void *));
+void * ObjList_toArray(ObjList l);
 
 #endif //WEEK3_LIST_H

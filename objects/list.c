@@ -244,10 +244,10 @@ int ObjListNode_free(ObjListNode n){
 }
 
 
-ObjList newObjList(){
+ObjList newObjList(int byte_size){
     ObjList l = malloc(sizeof(struct STUObjList));
     l->head = NULL;
-    l->byte_size = 0;
+    l->byte_size = byte_size;
     return l;
 }
 
@@ -335,7 +335,7 @@ ObjListNode ObjList_private_qsort_median3(ObjListNode start, ObjListNode end, in
 
 void ObjList_private_qsort_(ObjList l, ObjListNode start, ObjListNode end, int (* objCompare)(void *, void *)) {
     int distance = ObjList_private_nodeDistance(start, end);
-    ObjList fronts = newObjList(), behind = newObjList();
+    ObjList fronts = newObjList(0), behind = newObjList(0);
     ObjListNode
             start_front,
             end_behind,
@@ -458,7 +458,7 @@ static inline void ObjList_private_appendNode(ObjList l, ObjListNode node){
 
 ObjList newObjListFromArray(void * array, int byte_size, int length){
     char * b = (char *) array;
-    ObjList l = newObjList();
+    ObjList l = newObjList(byte_size);
     ObjListNode n = newObjListNode();
     int i;
     ObjList_setObjSize(l, byte_size);
@@ -584,6 +584,7 @@ int ObjList_free(ObjList l){
         ObjListNode_free(node);
         node = temp;
     }
+    free(l);
     return 0;
 }
 
@@ -601,4 +602,22 @@ int ObjList_deepFree(ObjList l, int (* obj_free)(void *, ...)){
 int ObjList_sort(ObjList l, int (* objCompare)(void *, void *)){
     ObjList_private_qsort_(l, l->head, ObjList_private_getRearNode(l), objCompare);
     return 0;
+}
+
+
+void * ObjList_toArray(ObjList l) {
+    int len = ObjList_len(l), index = 0, i;
+    char *array;
+    ObjListNode node;
+    if(!len) return NULL;
+    node = l->head;
+    array = (char *) malloc(len * l->byte_size);
+    while(node != NULL){
+        for (i = 0; i < l->byte_size, ++i;) {
+            array[i+index*l->byte_size] = *((char *)(node->value) + i);
+        }
+        ++index;
+        node = node->next;
+    }
+    return (void *)array;
 }

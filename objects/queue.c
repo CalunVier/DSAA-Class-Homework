@@ -99,7 +99,7 @@ struct STUListQueue{
 
 
 ListQueue newListQueue(){
-    ObjList l = newObjList();
+    ObjList l = newObjList(0);
     ListQueue lq = malloc(sizeof(struct STUListQueue));
     lq->list = l;
     return lq;

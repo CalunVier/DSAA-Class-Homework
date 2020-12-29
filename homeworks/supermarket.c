@@ -88,7 +88,7 @@ int supermarket_main() {
     const int q2_number_limit = 5;
     const int time_per_settle = 10;
     const int essential_settle_time = 60;
-    ObjList list_customer = newObjList();
+    ObjList list_customer = newObjList(0);
     random_init();
 
     for (int i = 0; i < customer_Number; ++i) {
