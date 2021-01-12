@@ -1,7 +1,6 @@
 //
 // Created by Calun on 2020/10/27.
 //
-#include "objects.h"
 
 #ifndef WEEK3_QUEUE_H
 #define WEEK3_QUEUE_H
