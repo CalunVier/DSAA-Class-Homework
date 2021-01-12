@@ -8,44 +8,7 @@
 #include <stdio.h>
 #include "../objects/list.h"
 #include "../objects/queue.h"
-
-
-typedef struct {
-    int id;
-    int age;
-    int buy_numbers;
-    int arrive_time;
-    int leave_time;
-} Customer;
-typedef Customer *CustomerPtr;
-
-
-CustomerPtr newCustomer(int id, int age, int buy, int arrive_time, int leave_time) {
-    CustomerPtr c = malloc(sizeof(Customer));
-    c->id = id;
-    c->age = age;
-    c->buy_numbers = buy;
-    c->arrive_time = arrive_time;
-    c->leave_time = leave_time;
-    return c;
-}
-
-
-int clock2int(int h, int min, int s) {
-    return h * 3600 + min * 60 + s;
-}
-
-
-int customer_com_arrive_time(void *a1, void *a2) {
-    CustomerPtr c1 = a1, c2 = a2;
-    if (c1->arrive_time > c2->arrive_time) {
-        return 1;
-    } else if (c1->arrive_time < c2->arrive_time) {
-        return -1;
-    } else {
-        return 0;
-    }
-}
+#include "supermarket.h"
 
 
 static inline int buy_time(int number) {
@@ -53,7 +16,7 @@ static inline int buy_time(int number) {
 }
 
 
-void clear_queue(ArrayQueue q, int now_time) {
+void clear_arrayQueue(ArrayQueue q, int now_time) {
     CustomerPtr c;
     while (1) {
         c = ArrayQueue_head(q);
@@ -64,7 +27,7 @@ void clear_queue(ArrayQueue q, int now_time) {
 }
 
 
-int old_q_partition(ArrayQueue q, CustomerPtr c) {
+int old_aq_partition(ArrayQueue q, CustomerPtr c) {
     int len = ArrayQueue_len(q);
     CustomerPtr oc;
     if (len == 0) return 0;
@@ -74,11 +37,6 @@ int old_q_partition(ArrayQueue q, CustomerPtr c) {
             return i;
     }
     return 0;
-}
-
-
-int customer_com_id(void *a1, void *a2) {
-    return ((CustomerPtr) a1)->id - ((CustomerPtr) a2)->id;
 }
 
 
@@ -154,15 +112,15 @@ int array_supermarket_main() {
             now_time = bc->leave_time;  // 更新时间
 
             /*清洗队列*/
-            clear_queue(q1, now_time);
-            clear_queue(q2, now_time);
-            clear_queue(q3, now_time);
-            clear_queue(q4, now_time);
-            clear_queue(q5, now_time);
+            clear_arrayQueue(q1, now_time);
+            clear_arrayQueue(q2, now_time);
+            clear_arrayQueue(q3, now_time);
+            clear_arrayQueue(q4, now_time);
+            clear_arrayQueue(q5, now_time);
 
             /*计算队列位置*/
             if (bc->age >= q1_age_limit) {
-                choose[0] = old_q_partition(q1, bc);
+                choose[0] = old_aq_partition(q1, bc);
             } else {
                 choose[0] = -1;
             }

@@ -10,16 +10,6 @@
 #include "../objects/queue.h"
 
 
-typedef struct {
-    int id;
-    int age;
-    int buy_numbers;
-    int arrive_time;
-    int leave_time;
-} Customer;
-typedef Customer *CustomerPtr;
-
-
 CustomerPtr newCustomer(int id, int age, int buy, int arrive_time, int leave_time) {
     CustomerPtr c = malloc(sizeof(Customer));
     c->id = id;
