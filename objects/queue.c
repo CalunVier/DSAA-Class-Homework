@@ -21,10 +21,11 @@ ArrayQueue newArrayQueue(int max_length)
 
 ArrayQueue newArrayQueueFromArray(void *a, int length, int max_length, int byte_size)
 {
+    char * b = a;
     if(max_length>=length){
         ArrayQueue q = newArrayQueue(max_length);
         int i;
-        for(i=0;i<length;++i) ArrayQueue_add(q, a + i * byte_size);
+        for(i=0;i<length;++i) ArrayQueue_add(q, b + i * byte_size);
         return q;
     }else{
         return NULL;

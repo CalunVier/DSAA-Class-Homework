@@ -5,12 +5,11 @@
 #include "migong_tao.h"
 #include <stdio.h>
 #include <stdlib.h>
-#define MIGONG_SIZE 70
-#include <time.h>
+#define WEEK3_MIGONG_TAO_MIGONG_SIZE 70
 
 
 /* 生成迷宫，并利用迪杰斯特拉算法求给定两点间的最短路径 */
-int maze[MIGONG_SIZE + 2][MIGONG_SIZE + 2];
+int maze[WEEK3_MIGONG_TAO_MIGONG_SIZE + 2][WEEK3_MIGONG_TAO_MIGONG_SIZE + 2];
 
 //从1到10：10
 //从10到1：10
@@ -43,21 +42,21 @@ int distance(int a,int b)
 
 int point_to_index(int x, int y)
 {
-    return y * MIGONG_SIZE + x;
+    return y * WEEK3_MIGONG_TAO_MIGONG_SIZE + x;
 }
 
 
-int migong_main()
+int migong_tao_main()
 {
     FILE* save_file = fopen("migong.txt", "w+");
     //生成伪随机迷宫
 
     //srand(time(NULL));
-    for(int i=0; i < MIGONG_SIZE + 2; i++)
+    for(int i=0; i < WEEK3_MIGONG_TAO_MIGONG_SIZE + 2; i++)
     {
-        for(int j=0; j < MIGONG_SIZE + 2; j++)
+        for(int j=0; j < WEEK3_MIGONG_TAO_MIGONG_SIZE + 2; j++)
         {
-            if(i==0 ||j==0 || i == MIGONG_SIZE + 1 || j == MIGONG_SIZE + 1)
+            if(i==0 ||j==0 || i == WEEK3_MIGONG_TAO_MIGONG_SIZE + 1 || j == WEEK3_MIGONG_TAO_MIGONG_SIZE + 1)
             {
                 maze[i][j]=0;
                 printf("  ");
@@ -90,32 +89,32 @@ int migong_main()
     }
 
     //生成list表示图 顺序 左右上下 每个占4个位置 1,10表示有路 0表示没有
-    int mazelist[MIGONG_SIZE * MIGONG_SIZE][4];
-    for(int i=0; i < MIGONG_SIZE * MIGONG_SIZE; i++)
+    int mazelist[WEEK3_MIGONG_TAO_MIGONG_SIZE * WEEK3_MIGONG_TAO_MIGONG_SIZE][4];
+    for(int i=0; i < WEEK3_MIGONG_TAO_MIGONG_SIZE * WEEK3_MIGONG_TAO_MIGONG_SIZE; i++)
     {
         //mazelist[i]=maze[1+i/20][1+i%20] 第i个数对应的在maze矩阵中的位置
-        if(maze[1+ i / MIGONG_SIZE][1 + i % MIGONG_SIZE] == 0)
+        if(maze[1+ i / WEEK3_MIGONG_TAO_MIGONG_SIZE][1 + i % WEEK3_MIGONG_TAO_MIGONG_SIZE] == 0)
         {
             mazelist[i][0]=0;mazelist[i][1]=0;mazelist[i][2]=0;mazelist[i][3]=0;
         }
         else{
-            int b=maze[1+ i / MIGONG_SIZE][1 + i % MIGONG_SIZE];
-            mazelist[i][0]=distance(maze[1+ i / MIGONG_SIZE][i % MIGONG_SIZE], b);
-            mazelist[i][1]=distance(maze[1+ i / MIGONG_SIZE][2 + i % MIGONG_SIZE], b);
-            mazelist[i][2]=distance(maze[i / MIGONG_SIZE][1 + i % MIGONG_SIZE], b);
-            mazelist[i][3]=distance(maze[2+ i / MIGONG_SIZE][1 + i % MIGONG_SIZE], b);
+            int b=maze[1+ i / WEEK3_MIGONG_TAO_MIGONG_SIZE][1 + i % WEEK3_MIGONG_TAO_MIGONG_SIZE];
+            mazelist[i][0]=distance(maze[1+ i / WEEK3_MIGONG_TAO_MIGONG_SIZE][i % WEEK3_MIGONG_TAO_MIGONG_SIZE], b);
+            mazelist[i][1]=distance(maze[1+ i / WEEK3_MIGONG_TAO_MIGONG_SIZE][2 + i % WEEK3_MIGONG_TAO_MIGONG_SIZE], b);
+            mazelist[i][2]=distance(maze[i / WEEK3_MIGONG_TAO_MIGONG_SIZE][1 + i % WEEK3_MIGONG_TAO_MIGONG_SIZE], b);
+            mazelist[i][3]=distance(maze[2+ i / WEEK3_MIGONG_TAO_MIGONG_SIZE][1 + i % WEEK3_MIGONG_TAO_MIGONG_SIZE], b);
             //printf("\n第%d个节点，%d,%d,%d,%d.",i,mazelist[i][0],mazelist[i][1],mazelist[i][2],mazelist[i][3]);
         }
     }
 
     //生成visited list
-    int visited[MIGONG_SIZE * MIGONG_SIZE][3];
-    for (int i = 0; i < MIGONG_SIZE * MIGONG_SIZE; i++)
+    int visited[WEEK3_MIGONG_TAO_MIGONG_SIZE * WEEK3_MIGONG_TAO_MIGONG_SIZE][3];
+    for (int i = 0; i < WEEK3_MIGONG_TAO_MIGONG_SIZE * WEEK3_MIGONG_TAO_MIGONG_SIZE; i++)
     {
         visited[i][0]=0;//0：未被访问；1：被访问
         visited[i][1]=-1;//上一个节点是哪个
         visited[i][2]=999999;//Dist,从第一个节点到该节点的距离
-        if(maze[1+ i / MIGONG_SIZE][i % MIGONG_SIZE] == 0)
+        if(maze[1+ i / WEEK3_MIGONG_TAO_MIGONG_SIZE][i % WEEK3_MIGONG_TAO_MIGONG_SIZE] == 0)
             visited[i][1]=-2;
     }
     visited[0][0]=1;visited[0][2]=0;
@@ -135,7 +134,7 @@ int migong_main()
     int min=0;int d=0;int id=0;
     visited[dijstart][0]=1;
     visited[dijstart][2]=0;
-    if(maze[1+ dijstart / MIGONG_SIZE][1 + dijstart % MIGONG_SIZE] == 0)
+    if(maze[1+ dijstart / WEEK3_MIGONG_TAO_MIGONG_SIZE][1 + dijstart % WEEK3_MIGONG_TAO_MIGONG_SIZE] == 0)
     {
         printf("\n没有通路\n");
         fprintf(save_file, "\n没有通路\n");
@@ -158,7 +157,7 @@ int migong_main()
         //visited 中 第i个数的
         //左边：i-1；右边i+1.在左右端点处不会涉及其左、右端的操作
         //上边：i%20+20*(i/20-1);下边：i%20+20*(i/20+1)
-        if(maze[1+ dijstart / MIGONG_SIZE][dijstart % MIGONG_SIZE] > 0)//判断访问起始点左边的点是否可以走
+        if(maze[1+ dijstart / WEEK3_MIGONG_TAO_MIGONG_SIZE][dijstart % WEEK3_MIGONG_TAO_MIGONG_SIZE] > 0)//判断访问起始点左边的点是否可以走
         {										//可以走，且比当前的dist小，则
             d=visited[dijstart][2]+mazelist[dijstart][0];
             if(d<visited[dijstart-1][2])
@@ -167,7 +166,7 @@ int migong_main()
                 visited[dijstart-1][2]=d; //Dist为dijstart的Dist+dijstart到左边点的距离
             }
         }
-        if(maze[1+ dijstart / MIGONG_SIZE][2 + dijstart % MIGONG_SIZE] > 0)
+        if(maze[1+ dijstart / WEEK3_MIGONG_TAO_MIGONG_SIZE][2 + dijstart % WEEK3_MIGONG_TAO_MIGONG_SIZE] > 0)
         {
             d=visited[dijstart][2]+mazelist[dijstart][1];
             if(d<visited[dijstart+1][2])
@@ -176,9 +175,9 @@ int migong_main()
                 visited[dijstart+1][2]=d;
             }
         }
-        if(maze[dijstart / MIGONG_SIZE][1 + dijstart % MIGONG_SIZE] > 0)
+        if(maze[dijstart / WEEK3_MIGONG_TAO_MIGONG_SIZE][1 + dijstart % WEEK3_MIGONG_TAO_MIGONG_SIZE] > 0)
         {
-            id= dijstart % MIGONG_SIZE + MIGONG_SIZE * (dijstart / MIGONG_SIZE - 1);
+            id= dijstart % WEEK3_MIGONG_TAO_MIGONG_SIZE + WEEK3_MIGONG_TAO_MIGONG_SIZE * (dijstart / WEEK3_MIGONG_TAO_MIGONG_SIZE - 1);
             d=visited[dijstart][2]+mazelist[dijstart][2];
             if(d<visited[id][2])
             {
@@ -186,9 +185,9 @@ int migong_main()
                 visited[id][2]=d;
             }
         }
-        if(maze[2+ dijstart / MIGONG_SIZE][1 + dijstart % MIGONG_SIZE] > 0)
+        if(maze[2+ dijstart / WEEK3_MIGONG_TAO_MIGONG_SIZE][1 + dijstart % WEEK3_MIGONG_TAO_MIGONG_SIZE] > 0)
         {
-            id= dijstart % MIGONG_SIZE + MIGONG_SIZE * (dijstart / MIGONG_SIZE + 1);
+            id= dijstart % WEEK3_MIGONG_TAO_MIGONG_SIZE + WEEK3_MIGONG_TAO_MIGONG_SIZE * (dijstart / WEEK3_MIGONG_TAO_MIGONG_SIZE + 1);
             d=visited[dijstart][2]+mazelist[dijstart][3];
             if(d<visited[id][2])
             {
@@ -197,7 +196,7 @@ int migong_main()
             }
         }
         min=99999;
-        for(int i = 0; i < MIGONG_SIZE * MIGONG_SIZE; i++)
+        for(int i = 0; i < WEEK3_MIGONG_TAO_MIGONG_SIZE * WEEK3_MIGONG_TAO_MIGONG_SIZE; i++)
         {
 
             if((mazelist[i]!=0)&&(visited[i][0]==0))
@@ -213,7 +212,7 @@ int migong_main()
     int temp=visited[end][1];
     while(temp!=start)
     {
-        maze[1+ temp / MIGONG_SIZE][1 + temp % MIGONG_SIZE]=5;
+        maze[1+ temp / WEEK3_MIGONG_TAO_MIGONG_SIZE][1 + temp % WEEK3_MIGONG_TAO_MIGONG_SIZE]=5;
         printf("%d,", temp);
         fprintf(save_file, "%d,", temp);
         temp=visited[temp][1];
@@ -221,11 +220,11 @@ int migong_main()
     printf("\n");
     fprintf(save_file, "\n");
     //输出图
-    for(int i=0; i < MIGONG_SIZE + 2; i++)
+    for(int i=0; i < WEEK3_MIGONG_TAO_MIGONG_SIZE + 2; i++)
     {
-        for(int j=0; j < MIGONG_SIZE + 2; j++)
+        for(int j=0; j < WEEK3_MIGONG_TAO_MIGONG_SIZE + 2; j++)
         {
-            if(i==0 ||j==0 || i == MIGONG_SIZE + 1 || j == MIGONG_SIZE + 1)
+            if(i==0 ||j==0 || i == WEEK3_MIGONG_TAO_MIGONG_SIZE + 1 || j == WEEK3_MIGONG_TAO_MIGONG_SIZE + 1)
             {
                 printf("  ");
                 fprintf(save_file, "  ");

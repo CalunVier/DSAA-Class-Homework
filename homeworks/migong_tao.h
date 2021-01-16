@@ -5,6 +5,6 @@
 #ifndef WEEK3_MIGONG_TAO_H
 #define WEEK3_MIGONG_TAO_H
 
-int migong_main();
+int migong_tao_main();
 
 #endif //WEEK3_MIGONG_TAO_H

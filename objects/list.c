@@ -566,6 +566,7 @@ void * ObjList_get(ObjList l, int index){
     ObjListNode node;
     if(!OL_isBlank(l)){
         node = l->head;
+        if (index < 0) return NULL;
         while(index > 0){
             node = node->next;
             if (node == NULL) return NULL;
