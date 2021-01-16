@@ -2,7 +2,7 @@
 // Created by Calun on 2021/1/12.
 //
 
-#include "migong.h"
+#include "migong_tao.h"
 #include <stdio.h>
 #include <stdlib.h>
 #define MIGONG_SIZE 70
