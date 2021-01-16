@@ -105,6 +105,7 @@ void DijkstraInMap(DijkstraTable *table, int vertex_number, int(*smallest)(Dijks
                     table[temp_vertex->index_in_table].dist = table[vertex->index_in_table].dist + vertex->distance;
                     table[temp_vertex->index_in_table].path = vertex->index_in_table;
                 }
+            temp_vertex = ObjList_get(table[vertex->index_in_table].header, i++);
         }
     }
 }
