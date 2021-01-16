@@ -2,20 +2,20 @@
 // Created by Calun on 2021/1/12.
 //
 
-#include "migong.h"
+#include "migong_tao.h"
 #include <stdio.h>
 #include <stdlib.h>
 #define MIGONG_SIZE 70
 #include <time.h>
 
 
-/* Éú³ÉÃÔ¹¬£¬²¢ÀûÓÃµÏ½ÜË¹ÌØÀ­Ëã·¨Çó¸ø¶¨Á½µã¼äµÄ×î¶ÌÂ·¾¶ */
+/* ï¿½ï¿½ï¿½ï¿½ï¿½Ô¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÃµÏ½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ã·¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ */
 int maze[MIGONG_SIZE + 2][MIGONG_SIZE + 2];
 
-//´Ó1µ½10£º10
-//´Ó10µ½1£º10
-//´Ó1µ½1£º1
-//´Ó10µ½10£º10
+//ï¿½ï¿½1ï¿½ï¿½10ï¿½ï¿½10
+//ï¿½ï¿½10ï¿½ï¿½1ï¿½ï¿½10
+//ï¿½ï¿½1ï¿½ï¿½1ï¿½ï¿½1
+//ï¿½ï¿½10ï¿½ï¿½10ï¿½ï¿½10
 int distance(int a,int b)
 {
     if(a==0)
@@ -50,7 +50,7 @@ int point_to_index(int x, int y)
 int migong_main()
 {
     FILE* save_file = fopen("migong.txt", "w+");
-    //Éú³ÉÎ±Ëæ»úÃÔ¹¬
+    //ï¿½ï¿½ï¿½ï¿½Î±ï¿½ï¿½ï¿½ï¿½Ô¹ï¿½
 
     //srand(time(NULL));
     for(int i=0; i < MIGONG_SIZE + 2; i++)
@@ -79,8 +79,8 @@ int migong_main()
                 }
                 if(maze[i][j]==0)
                 {
-                    printf("©–");
-                    fprintf(save_file,"©–");
+                    printf("ï¿½ï¿½");
+                    fprintf(save_file,"ï¿½ï¿½");
                 }
             }
 
@@ -89,11 +89,11 @@ int migong_main()
         fprintf(save_file, "\n");
     }
 
-    //Éú³Élist±íÊ¾Í¼ Ë³Ðò ×óÓÒÉÏÏÂ Ã¿¸öÕ¼4¸öÎ»ÖÃ 1,10±íÊ¾ÓÐÂ· 0±íÊ¾Ã»ÓÐ
+    //ï¿½ï¿½ï¿½ï¿½listï¿½ï¿½Ê¾Í¼ Ë³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¿ï¿½ï¿½Õ¼4ï¿½ï¿½Î»ï¿½ï¿½ 1,10ï¿½ï¿½Ê¾ï¿½ï¿½Â· 0ï¿½ï¿½Ê¾Ã»ï¿½ï¿½
     int mazelist[MIGONG_SIZE * MIGONG_SIZE][4];
     for(int i=0; i < MIGONG_SIZE * MIGONG_SIZE; i++)
     {
-        //mazelist[i]=maze[1+i/20][1+i%20] µÚi¸öÊý¶ÔÓ¦µÄÔÚmaze¾ØÕóÖÐµÄÎ»ÖÃ
+        //mazelist[i]=maze[1+i/20][1+i%20] ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½mazeï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½Î»ï¿½ï¿½
         if(maze[1+ i / MIGONG_SIZE][1 + i % MIGONG_SIZE] == 0)
         {
             mazelist[i][0]=0;mazelist[i][1]=0;mazelist[i][2]=0;mazelist[i][3]=0;
@@ -104,67 +104,67 @@ int migong_main()
             mazelist[i][1]=distance(maze[1+ i / MIGONG_SIZE][2 + i % MIGONG_SIZE], b);
             mazelist[i][2]=distance(maze[i / MIGONG_SIZE][1 + i % MIGONG_SIZE], b);
             mazelist[i][3]=distance(maze[2+ i / MIGONG_SIZE][1 + i % MIGONG_SIZE], b);
-            //printf("\nµÚ%d¸ö½Úµã£¬%d,%d,%d,%d.",i,mazelist[i][0],mazelist[i][1],mazelist[i][2],mazelist[i][3]);
+            //printf("\nï¿½ï¿½%dï¿½ï¿½ï¿½Úµã£¬%d,%d,%d,%d.",i,mazelist[i][0],mazelist[i][1],mazelist[i][2],mazelist[i][3]);
         }
     }
 
-    //Éú³Évisited list
+    //ï¿½ï¿½ï¿½ï¿½visited list
     int visited[MIGONG_SIZE * MIGONG_SIZE][3];
     for (int i = 0; i < MIGONG_SIZE * MIGONG_SIZE; i++)
     {
-        visited[i][0]=0;//0£ºÎ´±»·ÃÎÊ£»1£º±»·ÃÎÊ
-        visited[i][1]=-1;//ÉÏÒ»¸ö½ÚµãÊÇÄÄ¸ö
-        visited[i][2]=999999;//Dist,´ÓµÚÒ»¸ö½Úµãµ½¸Ã½ÚµãµÄ¾àÀë
+        visited[i][0]=0;//0ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½Ê£ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        visited[i][1]=-1;//ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½Ä¸ï¿½
+        visited[i][2]=999999;//Dist,ï¿½Óµï¿½Ò»ï¿½ï¿½ï¿½Úµãµ½ï¿½Ã½Úµï¿½Ä¾ï¿½ï¿½ï¿½
         if(maze[1+ i / MIGONG_SIZE][i % MIGONG_SIZE] == 0)
             visited[i][1]=-2;
     }
     visited[0][0]=1;visited[0][2]=0;
-    //ÉèÖÃÆðÊ¼µã£¬ÖÕÖ¹µã
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ã£¬ï¿½ï¿½Ö¹ï¿½ï¿½
     int start,end, px, py;
-    printf("\nÇëÊäÈëÆðÊ¼Î»ÖÃ£º");
+    printf("\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Î»ï¿½Ã£ï¿½");
     scanf("%d %d",&px, &py);
     start = point_to_index(px, py);
     fprintf(save_file, "%d %d\n", px, py);
-    printf("\nÇëÊäÈëÖÕÖ¹Î»ÖÃ£º");
+    printf("\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹Î»ï¿½Ã£ï¿½");
     scanf("%d %d",&px, &py);
     fprintf(save_file, "%d  %d", px, py);
     end = point_to_index(px, py);
 
-    //ÉèÖÃµÏ½ÜË¹ÌØÀ­Ã¿´ÎÑ­»·µÄÆðµã
+    //ï¿½ï¿½ï¿½ÃµÏ½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     int dijstart=start;
     int min=0;int d=0;int id=0;
     visited[dijstart][0]=1;
     visited[dijstart][2]=0;
     if(maze[1+ dijstart / MIGONG_SIZE][1 + dijstart % MIGONG_SIZE] == 0)
     {
-        printf("\nÃ»ÓÐÍ¨Â·\n");
-        fprintf(save_file, "\nÃ»ÓÐÍ¨Â·\n");
+        printf("\nÃ»ï¿½ï¿½Í¨Â·\n");
+        fprintf(save_file, "\nÃ»ï¿½ï¿½Í¨Â·\n");
         system("pause");
         exit(0);
     }
-    //µÏ½ÜË¹ÌØÀ­Ëã·¨
+    //ï¿½Ï½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ã·¨
     int roundtime=0;
     while(visited[end][0]!=1)
     {
         roundtime+=1;
         if(roundtime>20000)
         {
-            printf("\nÃ»ÓÐÍ¨Â·\n");
-            fprintf(save_file, "\nÃ»ÓÐÍ¨Â·\n");
+            printf("\nÃ»ï¿½ï¿½Í¨Â·\n");
+            fprintf(save_file, "\nÃ»ï¿½ï¿½Í¨Â·\n");
             system("pause");
             exit(0);
             break;
         }
-        //visited ÖÐ µÚi¸öÊýµÄ
-        //×ó±ß£ºi-1£»ÓÒ±ßi+1.ÔÚ×óÓÒ¶Ëµã´¦²»»áÉæ¼°Æä×ó¡¢ÓÒ¶ËµÄ²Ù×÷
-        //ÉÏ±ß£ºi%20+20*(i/20-1);ÏÂ±ß£ºi%20+20*(i/20+1)
-        if(maze[1+ dijstart / MIGONG_SIZE][dijstart % MIGONG_SIZE] > 0)//ÅÐ¶Ï·ÃÎÊÆðÊ¼µã×ó±ßµÄµãÊÇ·ñ¿ÉÒÔ×ß
-        {										//¿ÉÒÔ×ß£¬ÇÒ±Èµ±Ç°µÄdistÐ¡£¬Ôò
+        //visited ï¿½ï¿½ ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        //ï¿½ï¿½ß£ï¿½i-1ï¿½ï¿½ï¿½Ò±ï¿½i+1.ï¿½ï¿½ï¿½ï¿½ï¿½Ò¶Ëµã´¦ï¿½ï¿½ï¿½ï¿½ï¿½æ¼°ï¿½ï¿½ï¿½ï¿½ï¿½Ò¶ËµÄ²ï¿½ï¿½ï¿½
+        //ï¿½Ï±ß£ï¿½i%20+20*(i/20-1);ï¿½Â±ß£ï¿½i%20+20*(i/20+1)
+        if(maze[1+ dijstart / MIGONG_SIZE][dijstart % MIGONG_SIZE] > 0)//ï¿½Ð¶Ï·ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ßµÄµï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        {										//ï¿½ï¿½ï¿½ï¿½ï¿½ß£ï¿½ï¿½Ò±Èµï¿½Ç°ï¿½ï¿½distÐ¡ï¿½ï¿½ï¿½ï¿½
             d=visited[dijstart][2]+mazelist[dijstart][0];
             if(d<visited[dijstart-1][2])
             {
-                visited[dijstart-1][1]=dijstart;	//ÉÏÒ»½Úµã(pr)ÉèÖÃÎªdijstart
-                visited[dijstart-1][2]=d; //DistÎªdijstartµÄDist+dijstartµ½×ó±ßµãµÄ¾àÀë
+                visited[dijstart-1][1]=dijstart;	//ï¿½ï¿½Ò»ï¿½Úµï¿½(pr)ï¿½ï¿½ï¿½ï¿½Îªdijstart
+                visited[dijstart-1][2]=d; //DistÎªdijstartï¿½ï¿½Dist+dijstartï¿½ï¿½ï¿½ï¿½ßµï¿½Ä¾ï¿½ï¿½ï¿½
             }
         }
         if(maze[1+ dijstart / MIGONG_SIZE][2 + dijstart % MIGONG_SIZE] > 0)
@@ -207,9 +207,9 @@ int migong_main()
         }
         visited[dijstart][0]=1;
     }
-    printf("\n×î¶ÌÂ·¾¶³¤¶ÈÊÇ£º%d£¬Â·¾¶ÊÇ£º",visited[end][2]);
-    fprintf(save_file, "\n×î¶ÌÂ·¾¶³¤¶ÈÊÇ£º%d£¬Â·¾¶ÊÇ£º",visited[end][2]);
-    //Êä³öÂ·¾¶
+    printf("\nï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½%dï¿½ï¿½Â·ï¿½ï¿½ï¿½Ç£ï¿½",visited[end][2]);
+    fprintf(save_file, "\nï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½%dï¿½ï¿½Â·ï¿½ï¿½ï¿½Ç£ï¿½",visited[end][2]);
+    //ï¿½ï¿½ï¿½Â·ï¿½ï¿½
     int temp=visited[end][1];
     while(temp!=start)
     {
@@ -220,7 +220,7 @@ int migong_main()
     }
     printf("\n");
     fprintf(save_file, "\n");
-    //Êä³öÍ¼
+    //ï¿½ï¿½ï¿½Í¼
     for(int i=0; i < MIGONG_SIZE + 2; i++)
     {
         for(int j=0; j < MIGONG_SIZE + 2; j++)
@@ -244,13 +244,13 @@ int migong_main()
                 }
                 if(maze[i][j]==0)
                 {
-                    printf("©–");
-                    fprintf(save_file, "©–");
+                    printf("ï¿½ï¿½");
+                    fprintf(save_file, "ï¿½ï¿½");
                 }
                 if(maze[i][j]==5)
                 {
-                    printf("¡ø");
-                    fprintf(save_file, "¡ø");
+                    printf("ï¿½ï¿½");
+                    fprintf(save_file, "ï¿½ï¿½");
                 }
             }
 
