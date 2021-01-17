@@ -28,7 +28,7 @@ void random_init(){
 
 
 int random_int_range(int min, int max) {
-    return (rand() % (max-min)) + min;
+    return (rand() % (max-min+1)) + min;
 
 }
 
