@@ -43,15 +43,15 @@ void initTable(DijkstraTable *table, void *graph, int vertex_number, int start, 
 }
 
 MapVertex *transportIntegerMap2ObjMap(int (*_int_map)[]) {
-    int i, j, (*int_map)[WEEK3_MIGONG_MIGONG_SIZE] = _int_map;
+    int y, x, (*int_map)[WEEK3_MIGONG_MIGONG_SIZE] = _int_map;
     MapVertex (*objMap)[WEEK3_MIGONG_MIGONG_SIZE] = malloc(
             sizeof(MapVertex) * WEEK3_MIGONG_MIGONG_SIZE * WEEK3_MIGONG_MIGONG_SIZE);
-    for (i = 0; i < WEEK3_MIGONG_MIGONG_SIZE; ++i) {
-        for (j = 0; j < WEEK3_MIGONG_MIGONG_SIZE; ++j) {
-            objMap[i][j].x = i;
-            objMap[i][j].y = j;
-            objMap[i][j].distance = int_map[i][j];
-            objMap[i][j].index_in_table = -1;
+    for (y = 0; y < WEEK3_MIGONG_MIGONG_SIZE; ++y) {
+        for (x = 0; x < WEEK3_MIGONG_MIGONG_SIZE; ++x) {
+            objMap[y][x].y = y;
+            objMap[y][x].x = x;
+            objMap[y][x].distance = int_map[y][x];
+            objMap[y][x].index_in_table = -1;
         }
     }
     return (MapVertex *) objMap;
@@ -59,34 +59,34 @@ MapVertex *transportIntegerMap2ObjMap(int (*_int_map)[]) {
 
 
 void readGraphFromIntegerMap(void * _int_map, DijkstraTable *table) {
-    int i, j, v = 0;
+    int y, x, v = 0;
     MapVertex (*obj_map)[WEEK3_MIGONG_MIGONG_SIZE] = _int_map;
     ObjList temp_list;
-    for (i = 0; i < WEEK3_MIGONG_MIGONG_SIZE; ++i) {
-        for (j = 0; j < WEEK3_MIGONG_MIGONG_SIZE; ++j) {
+    for (y = 0; y < WEEK3_MIGONG_MIGONG_SIZE; ++y) {
+        for (x = 0; x < WEEK3_MIGONG_MIGONG_SIZE; ++x) {
             //Check if is 0
-            if (obj_map[i][j].distance == 0) continue;
+            if (obj_map[y][x].distance == 0) continue;
             else {
                 table[v++].header = (temp_list = newObjList(sizeof(MapVertex)));
-                ObjList_append(temp_list, &obj_map[i][j]);
-                obj_map[i][j].index_in_table = v-1;
+                ObjList_append(temp_list, &obj_map[y][x]);
+                obj_map[y][x].index_in_table = v - 1;
             }
 
-            if (i - 1 > 0 && obj_map[i - 1][j].distance != 0) {
+            if (y - 1 > 0 && obj_map[y - 1][x].distance != 0) {
                 // up
-                ObjList_append(temp_list, &obj_map[i - 1][j]);
+                ObjList_append(temp_list, &obj_map[y - 1][x]);
             }
-            if (i + 1 < WEEK3_MIGONG_MIGONG_SIZE && obj_map[i + 1][j].distance != 0) {
+            if (y + 1 < WEEK3_MIGONG_MIGONG_SIZE && obj_map[y + 1][x].distance != 0) {
                 // down
-                ObjList_append(temp_list, &obj_map[i + 1][j]);
+                ObjList_append(temp_list, &obj_map[y + 1][x]);
             }
-            if (j - 1 > 0 && obj_map[i][j - 1].distance != 0) {
+            if (x - 1 > 0 && obj_map[y][x - 1].distance != 0) {
                 //left
-                ObjList_append(temp_list, &obj_map[i][j - 1]);
+                ObjList_append(temp_list, &obj_map[y][x - 1]);
             }
-            if (j + 1 < WEEK3_MIGONG_MIGONG_SIZE && obj_map[i][j + 1].distance != 0) {
+            if (x + 1 < WEEK3_MIGONG_MIGONG_SIZE && obj_map[y][x + 1].distance != 0) {
                 //right
-                ObjList_append(temp_list, &obj_map[i][j + 1]);
+                ObjList_append(temp_list, &obj_map[y][x + 1]);
             }
         }
     }
@@ -134,10 +134,10 @@ int findSmallestUnknownDistanceVertexInTable(DijkstraTable * table, int vertex_n
 
 void print_migong(MapVertex *_obj_map){
     MapVertex (*obj_map)[WEEK3_MIGONG_MIGONG_SIZE] = (void *)_obj_map;
-    int i, j;
-    for (i = 0; i < WEEK3_MIGONG_MIGONG_SIZE; ++i){
-        for (j = 0; j < WEEK3_MIGONG_MIGONG_SIZE; ++j) {
-            switch (obj_map[i][j].distance) {
+    int y, x;
+    for (y = 0; y < WEEK3_MIGONG_MIGONG_SIZE; ++y){
+        for (x = 0; x < WEEK3_MIGONG_MIGONG_SIZE; ++x) {
+            switch (obj_map[y][x].distance) {
                 case 0:
                     printf("©–");
                     break;
@@ -169,29 +169,29 @@ void findPath(DijkstraTable *table,MapVertex *obj_map,  int end){
 
 int migong_main() {
     int migong_map[WEEK3_MIGONG_MIGONG_SIZE][WEEK3_MIGONG_MIGONG_SIZE];
-    int i, j, temp1, start, end, x, y;
+    int y, x, temp1, start, end;
     int vertex_num = 0;
     DijkstraTable *table;
     MapVertex (*obj_map)[WEEK3_MIGONG_MIGONG_SIZE];
     random_init();
-    for (i = 0; i < WEEK3_MIGONG_MIGONG_SIZE; ++i)
-        for (j = 0; j < WEEK3_MIGONG_MIGONG_SIZE; ++j) {
+    for (y = 0; y < WEEK3_MIGONG_MIGONG_SIZE; ++y)
+        for (x = 0; x < WEEK3_MIGONG_MIGONG_SIZE; ++x) {
             temp1 = random_int_range(0, 2);
             switch (temp1) {
                 case 0:
-                    migong_map[i][j] = 0;
+                    migong_map[y][x] = 0;
                     break;
                 case 1:
-                    migong_map[i][j] = 1;
+                    migong_map[y][x] = 1;
                     ++vertex_num;
                     break;
                 case 2:
-                    migong_map[i][j] = 10;
+                    migong_map[y][x] = 10;
                     ++vertex_num;
                     break;
                 default:
                     /*error*/
-                    migong_map[i][j] = 0;
+                    migong_map[y][x] = 0;
                     break;
             }
 
