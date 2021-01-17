@@ -8,13 +8,13 @@
 #define WEEK3_MIGONG_TAO_MIGONG_SIZE 70
 
 
-/* ç”Ÿæˆè¿·å®«ï¼Œå¹¶åˆ©ç”¨è¿ªæ°æ–¯ç‰¹æ‹‰ç®—æ³•æ±‚ç»™å®šä¸¤ç‚¹é—´çš„æœ€çŸ­è·¯å¾„ */
+/* Éú³ÉÃÔ¹¬£¬²¢ÀûÓÃµÏ½ÜË¹ÌØÀ­Ëã·¨Çó¸ø¶¨Á½µã¼äµÄ×î¶ÌÂ·¾¶ */
 int maze[WEEK3_MIGONG_TAO_MIGONG_SIZE + 2][WEEK3_MIGONG_TAO_MIGONG_SIZE + 2];
 
-//ä»1åˆ°10ï¼š10
-//ä»10åˆ°1ï¼š10
-//ä»1åˆ°1ï¼š1
-//ä»10åˆ°10ï¼š10
+//´Ó1µ½10£º10
+//´Ó10µ½1£º10
+//´Ó1µ½1£º1
+//´Ó10µ½10£º10
 int distance(int a,int b)
 {
     if(a==0)
@@ -49,7 +49,7 @@ int point_to_index(int x, int y)
 int migong_tao_main()
 {
     FILE* save_file = fopen("migong.txt", "w+");
-    //ç”Ÿæˆä¼ªéšæœºè¿·å®«
+    //Éú³ÉÎ±Ëæ»úÃÔ¹¬
 
     //srand(time(NULL));
     for(int i=0; i < WEEK3_MIGONG_TAO_MIGONG_SIZE + 2; i++)
@@ -67,19 +67,19 @@ int migong_tao_main()
                 maze[i][j]=rand()%3;
                 if(maze[i][j]==1)
                 {
-                    printf("å£¹");
-                    fprintf(save_file, "å£¹");
+                    printf("Ò¼");
+                    fprintf(save_file, "Ò¼");
                 }
                 if(maze[i][j]==2)
                 {
-                    printf("æ‹¾");
-                    fprintf(save_file, "æ‹¾");
+                    printf("Ê°");
+                    fprintf(save_file, "Ê°");
                     maze[i][j]=10;
                 }
                 if(maze[i][j]==0)
                 {
-                    printf("ã€‡");
-                    fprintf(save_file,"ã€‡");
+                    printf("©–");
+                    fprintf(save_file,"©–");
                 }
             }
 
@@ -88,11 +88,11 @@ int migong_tao_main()
         fprintf(save_file, "\n");
     }
 
-    //ç”Ÿæˆlistè¡¨ç¤ºå›¾ é¡ºåº å·¦å³ä¸Šä¸‹ æ¯ä¸ªå 4ä¸ªä½ç½® 1,10è¡¨ç¤ºæœ‰è·¯ 0è¡¨ç¤ºæ²¡æœ‰
+    //Éú³Élist±íÊ¾Í¼ Ë³Ğò ×óÓÒÉÏÏÂ Ã¿¸öÕ¼4¸öÎ»ÖÃ 1,10±íÊ¾ÓĞÂ· 0±íÊ¾Ã»ÓĞ
     int mazelist[WEEK3_MIGONG_TAO_MIGONG_SIZE * WEEK3_MIGONG_TAO_MIGONG_SIZE][4];
     for(int i=0; i < WEEK3_MIGONG_TAO_MIGONG_SIZE * WEEK3_MIGONG_TAO_MIGONG_SIZE; i++)
     {
-        //mazelist[i]=maze[1+i/20][1+i%20] ç¬¬iä¸ªæ•°å¯¹åº”çš„åœ¨mazeçŸ©é˜µä¸­çš„ä½ç½®
+        //mazelist[i]=maze[1+i/20][1+i%20] µÚi¸öÊı¶ÔÓ¦µÄÔÚmaze¾ØÕóÖĞµÄÎ»ÖÃ
         if(maze[1+ i / WEEK3_MIGONG_TAO_MIGONG_SIZE][1 + i % WEEK3_MIGONG_TAO_MIGONG_SIZE] == 0)
         {
             mazelist[i][0]=0;mazelist[i][1]=0;mazelist[i][2]=0;mazelist[i][3]=0;
@@ -103,67 +103,67 @@ int migong_tao_main()
             mazelist[i][1]=distance(maze[1+ i / WEEK3_MIGONG_TAO_MIGONG_SIZE][2 + i % WEEK3_MIGONG_TAO_MIGONG_SIZE], b);
             mazelist[i][2]=distance(maze[i / WEEK3_MIGONG_TAO_MIGONG_SIZE][1 + i % WEEK3_MIGONG_TAO_MIGONG_SIZE], b);
             mazelist[i][3]=distance(maze[2+ i / WEEK3_MIGONG_TAO_MIGONG_SIZE][1 + i % WEEK3_MIGONG_TAO_MIGONG_SIZE], b);
-            //printf("\nç¬¬%dä¸ªèŠ‚ç‚¹ï¼Œ%d,%d,%d,%d.",i,mazelist[i][0],mazelist[i][1],mazelist[i][2],mazelist[i][3]);
+            //printf("\nµÚ%d¸ö½Úµã£¬%d,%d,%d,%d.",i,mazelist[i][0],mazelist[i][1],mazelist[i][2],mazelist[i][3]);
         }
     }
 
-    //ç”Ÿæˆvisited list
+    //Éú³Évisited list
     int visited[WEEK3_MIGONG_TAO_MIGONG_SIZE * WEEK3_MIGONG_TAO_MIGONG_SIZE][3];
     for (int i = 0; i < WEEK3_MIGONG_TAO_MIGONG_SIZE * WEEK3_MIGONG_TAO_MIGONG_SIZE; i++)
     {
-        visited[i][0]=0;//0ï¼šæœªè¢«è®¿é—®ï¼›1ï¼šè¢«è®¿é—®
-        visited[i][1]=-1;//ä¸Šä¸€ä¸ªèŠ‚ç‚¹æ˜¯å“ªä¸ª
-        visited[i][2]=999999;//Dist,ä»ç¬¬ä¸€ä¸ªèŠ‚ç‚¹åˆ°è¯¥èŠ‚ç‚¹çš„è·ç¦»
+        visited[i][0]=0;//0£ºÎ´±»·ÃÎÊ£»1£º±»·ÃÎÊ
+        visited[i][1]=-1;//ÉÏÒ»¸ö½ÚµãÊÇÄÄ¸ö
+        visited[i][2]=999999;//Dist,´ÓµÚÒ»¸ö½Úµãµ½¸Ã½ÚµãµÄ¾àÀë
         if(maze[1+ i / WEEK3_MIGONG_TAO_MIGONG_SIZE][i % WEEK3_MIGONG_TAO_MIGONG_SIZE] == 0)
             visited[i][1]=-2;
     }
     visited[0][0]=1;visited[0][2]=0;
-    //è®¾ç½®èµ·å§‹ç‚¹ï¼Œç»ˆæ­¢ç‚¹
+    //ÉèÖÃÆğÊ¼µã£¬ÖÕÖ¹µã
     int start,end, px, py;
-    printf("\nè¯·è¾“å…¥èµ·å§‹ä½ç½®ï¼š");
+    printf("\nÇëÊäÈëÆğÊ¼Î»ÖÃ£º");
     scanf("%d %d",&px, &py);
     start = point_to_index(px, py);
     fprintf(save_file, "%d %d\n", px, py);
-    printf("\nè¯·è¾“å…¥ç»ˆæ­¢ä½ç½®ï¼š");
+    printf("\nÇëÊäÈëÖÕÖ¹Î»ÖÃ£º");
     scanf("%d %d",&px, &py);
     fprintf(save_file, "%d  %d", px, py);
     end = point_to_index(px, py);
 
-    //è®¾ç½®è¿ªæ°æ–¯ç‰¹æ‹‰æ¯æ¬¡å¾ªç¯çš„èµ·ç‚¹
+    //ÉèÖÃµÏ½ÜË¹ÌØÀ­Ã¿´ÎÑ­»·µÄÆğµã
     int dijstart=start;
     int min=0;int d=0;int id=0;
     visited[dijstart][0]=1;
     visited[dijstart][2]=0;
     if(maze[1+ dijstart / WEEK3_MIGONG_TAO_MIGONG_SIZE][1 + dijstart % WEEK3_MIGONG_TAO_MIGONG_SIZE] == 0)
     {
-        printf("\næ²¡æœ‰é€šè·¯\n");
-        fprintf(save_file, "\næ²¡æœ‰é€šè·¯\n");
+        printf("\nÃ»ÓĞÍ¨Â·\n");
+        fprintf(save_file, "\nÃ»ÓĞÍ¨Â·\n");
         system("pause");
         exit(0);
     }
-    //è¿ªæ°æ–¯ç‰¹æ‹‰ç®—æ³•
+    //µÏ½ÜË¹ÌØÀ­Ëã·¨
     int roundtime=0;
     while(visited[end][0]!=1)
     {
         roundtime+=1;
         if(roundtime>20000)
         {
-            printf("\næ²¡æœ‰é€šè·¯\n");
-            fprintf(save_file, "\næ²¡æœ‰é€šè·¯\n");
+            printf("\nÃ»ÓĞÍ¨Â·\n");
+            fprintf(save_file, "\nÃ»ÓĞÍ¨Â·\n");
             system("pause");
             exit(0);
             break;
         }
-        //visited ä¸­ ç¬¬iä¸ªæ•°çš„
-        //å·¦è¾¹ï¼ši-1ï¼›å³è¾¹i+1.åœ¨å·¦å³ç«¯ç‚¹å¤„ä¸ä¼šæ¶‰åŠå…¶å·¦ã€å³ç«¯çš„æ“ä½œ
-        //ä¸Šè¾¹ï¼ši%20+20*(i/20-1);ä¸‹è¾¹ï¼ši%20+20*(i/20+1)
-        if(maze[1+ dijstart / WEEK3_MIGONG_TAO_MIGONG_SIZE][dijstart % WEEK3_MIGONG_TAO_MIGONG_SIZE] > 0)//åˆ¤æ–­è®¿é—®èµ·å§‹ç‚¹å·¦è¾¹çš„ç‚¹æ˜¯å¦å¯ä»¥èµ°
-        {										//å¯ä»¥èµ°ï¼Œä¸”æ¯”å½“å‰çš„distå°ï¼Œåˆ™
+        //visited ÖĞ µÚi¸öÊıµÄ
+        //×ó±ß£ºi-1£»ÓÒ±ßi+1.ÔÚ×óÓÒ¶Ëµã´¦²»»áÉæ¼°Æä×ó¡¢ÓÒ¶ËµÄ²Ù×÷
+        //ÉÏ±ß£ºi%20+20*(i/20-1);ÏÂ±ß£ºi%20+20*(i/20+1)
+        if(maze[1+ dijstart / WEEK3_MIGONG_TAO_MIGONG_SIZE][dijstart % WEEK3_MIGONG_TAO_MIGONG_SIZE] > 0)//ÅĞ¶Ï·ÃÎÊÆğÊ¼µã×ó±ßµÄµãÊÇ·ñ¿ÉÒÔ×ß
+        {										//¿ÉÒÔ×ß£¬ÇÒ±Èµ±Ç°µÄdistĞ¡£¬Ôò
             d=visited[dijstart][2]+mazelist[dijstart][0];
             if(d<visited[dijstart-1][2])
             {
-                visited[dijstart-1][1]=dijstart;	//ä¸Šä¸€èŠ‚ç‚¹(pr)è®¾ç½®ä¸ºdijstart
-                visited[dijstart-1][2]=d; //Distä¸ºdijstartçš„Dist+dijstartåˆ°å·¦è¾¹ç‚¹çš„è·ç¦»
+                visited[dijstart-1][1]=dijstart;	//ÉÏÒ»½Úµã(pr)ÉèÖÃÎªdijstart
+                visited[dijstart-1][2]=d; //DistÎªdijstartµÄDist+dijstartµ½×ó±ßµãµÄ¾àÀë
             }
         }
         if(maze[1+ dijstart / WEEK3_MIGONG_TAO_MIGONG_SIZE][2 + dijstart % WEEK3_MIGONG_TAO_MIGONG_SIZE] > 0)
@@ -206,9 +206,9 @@ int migong_tao_main()
         }
         visited[dijstart][0]=1;
     }
-    printf("\næœ€çŸ­è·¯å¾„é•¿åº¦æ˜¯ï¼š%dï¼Œè·¯å¾„æ˜¯ï¼š",visited[end][2]);
-    fprintf(save_file, "\næœ€çŸ­è·¯å¾„é•¿åº¦æ˜¯ï¼š%dï¼Œè·¯å¾„æ˜¯ï¼š",visited[end][2]);
-    //è¾“å‡ºè·¯å¾„
+    printf("\n×î¶ÌÂ·¾¶³¤¶ÈÊÇ£º%d£¬Â·¾¶ÊÇ£º",visited[end][2]);
+    fprintf(save_file, "\n×î¶ÌÂ·¾¶³¤¶ÈÊÇ£º%d£¬Â·¾¶ÊÇ£º",visited[end][2]);
+    //Êä³öÂ·¾¶
     int temp=visited[end][1];
     while(temp!=start)
     {
@@ -219,7 +219,7 @@ int migong_tao_main()
     }
     printf("\n");
     fprintf(save_file, "\n");
-    //è¾“å‡ºå›¾
+    //Êä³öÍ¼
     for(int i=0; i < WEEK3_MIGONG_TAO_MIGONG_SIZE + 2; i++)
     {
         for(int j=0; j < WEEK3_MIGONG_TAO_MIGONG_SIZE + 2; j++)
@@ -233,23 +233,23 @@ int migong_tao_main()
             {
                 if(maze[i][j]==1)
                 {
-                    printf("å£¹");
-                    fprintf(save_file, "å£¹");
+                    printf("Ò¼");
+                    fprintf(save_file, "Ò¼");
                 }
                 if(maze[i][j]==10)
                 {
-                    printf("æ‹¾");
-                    fprintf(save_file, "æ‹¾");
+                    printf("Ê°");
+                    fprintf(save_file, "Ê°");
                 }
                 if(maze[i][j]==0)
                 {
-                    printf("ã€‡");
-                    fprintf(save_file, "ã€‡");
+                    printf("©–");
+                    fprintf(save_file, "©–");
                 }
                 if(maze[i][j]==5)
                 {
-                    printf("â–²");
-                    fprintf(save_file, "â–²");
+                    printf("¡ø");
+                    fprintf(save_file, "¡ø");
                 }
             }
 
