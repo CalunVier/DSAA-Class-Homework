@@ -121,9 +121,13 @@ int findSmallestUnknownDistanceVertexInTable(DijkstraTable * table, int vertex_n
     int mmax = WEEK3_MIGONG_MIGONG_SIZE * WEEK3_MIGONG_MIGONG_SIZE;
     int i;
     for(i=0; i < vertex_num; ++i){
-        if(table[i].known==0) smallest = i;
+        if (table[i].known == 0)
+        {
+            smallest = i;
+            break;
+        }
     }
-    for(;i<vertex_num;++i){
+    for(++i;i<vertex_num;++i){
         if (table[i].known == 0 && table[i].dist < table[smallest].dist) {
             smallest = i;
         }
@@ -164,6 +168,7 @@ void findPath(DijkstraTable *table,MapVertex *obj_map,  int end){
         ((MapVertex *)ObjList_get(t.header, 0))->distance = 3;
         t = table[t.path];
     }
+    ((MapVertex*)ObjList_get(t.header, 0))->distance = 3;
 }
 
 
