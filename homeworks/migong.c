@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define MAX_INT ((unsigned int)(-1)>>1)
+#define MAX_INT (((unsigned int)(-1)>>1)/2)
 
 
 typedef struct {
@@ -189,16 +189,17 @@ void print_migong_to_file(FILE* file, MapVertex* _obj_map) {
 void findPath(DijkstraTable *table,MapVertex *obj_map, int end, ObjList path_list){
     DijkstraTable t;
     MapVertex * vertex;
+    
+    if (obj_map[end].index_in_table == -1 || table[obj_map[end].index_in_table].path == -1) return;
     t = table[obj_map[end].index_in_table];
-    if (t.dist == MAX_INT) return;
     while (t.dist) {
         vertex = ((MapVertex *)ObjList_get(t.header, 0));
-        vertex->distance = 3;
+        vertex->distance += 5;
         ObjList_insert(path_list, vertex, 0);
         t = table[t.path];
     }
     vertex = ((MapVertex *)ObjList_get(t.header, 0));
-    vertex->distance = 3;
+    vertex->distance += 5;
     ObjList_insert(path_list, vertex, 0);
 }
 
@@ -211,7 +212,7 @@ int migong_main() {
     ObjListIterator map_iterator;
     DijkstraTable *table;
     MapVertex (*obj_map)[WEEK3_MIGONG_MIGONG_SIZE], *vertex;
-    FILE* f = open("migong.txt","w+");
+    FILE* f = fopen("migong.txt","w+");
     random_init();
     for (y = 0; y < WEEK3_MIGONG_MIGONG_SIZE; ++y)
         for (x = 0; x < WEEK3_MIGONG_MIGONG_SIZE; ++x) {
@@ -242,23 +243,34 @@ int migong_main() {
     //read
     printf("Please input the start point(x y):");
     scanf("%d %d", &x, &y);
+    fprintf(f,"Please input the start point(x y):%d %d\n", x, y);
     start = new_point_to_index(x, y);
     printf("Please input the end point(x y):");
     scanf("%d %d", &x, &y);
+    fprintf(f, "Please input the end point(x y):%d %d\n", x, y);
     end = new_point_to_index(x, y);
     initTable(table, obj_map, vertex_num, readGraphFromIntegerMap);
     DijkstraInMap(table,vertex_num, ((MapVertex *)obj_map)[start].index_in_table, findSmallestUnknownDistanceVertexInTable);
     path_list = newObjList(sizeof(MapVertex));
     findPath(table, (MapVertex *)obj_map, end, path_list);
-    print_migong((MapVertex*)obj_map);
-
     map_iterator = ObjList_getIterator(path_list);
     vertex = ObjListIterator_next(map_iterator);
-    printf("(%d, %d, %d)", vertex->x, vertex->y, vertex->distance);
-    print_migong_to_file(f, (MapVertex*)obj_map);
-    while (vertex = ObjListIterator_next(map_iterator)) {
-        printf("->(%d, %d, %d)", vertex->x, vertex->y, vertex->distance);
+    if(vertex){
+        print_migong_to_file(f, (MapVertex*)obj_map);
+        print_migong((MapVertex*)obj_map);
+        printf("(%d, %d, %d)", vertex->x, vertex->y, vertex->distance-5);
+        fprintf(f, "(%d, %d, %d)", vertex->x, vertex->y, vertex->distance - 5);
+        while (vertex = ObjListIterator_next(map_iterator)) {
+            printf("->(%d, %d, %d)", vertex->x, vertex->y, vertex->distance-5);
+            fprintf(f, "->(%d, %d, %d)", vertex->x, vertex->y, vertex->distance - 5);
+        }
+        printf("\nThe total path distance is:%d", table[((MapVertex*)obj_map)[end].index_in_table].dist);
+        fprintf(f, "The total path distance is:%d", table[((MapVertex*)obj_map)[end].index_in_table].dist);
     }
-    printf("The total path distance is:", ((MapVertex*)obj_map)[end].distance);
+    else {
+        printf("Can not find a path!\n");
+        fprintf(f, "Can not find a path!\n");
+    }
+    fclose(f);
     return 0;
 }
