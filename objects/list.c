@@ -624,6 +624,53 @@ void * ObjList_toArray(ObjList l) {
 }
 
 
+struct STUObjListIterator{
+    ObjList list;
+    ObjListNode nowNode;
+    int index;
+};
+
+
+ObjListIterator ObjList_getIterator(ObjList l){
+    ObjListIterator oli = malloc(sizeof(struct STUObjListIterator));
+    oli->list = l;
+    oli->nowNode = l->head;
+    oli->nowNode = 0;
+    return oli;
+}
+
+
+void * ObjListIterator_next(ObjListIterator oli){
+    int result = oli->nowNode;
+    if(oli->nowNode){
+        ++(oli->index);
+        oli->nowNode = oli->nowNode->next;
+    }
+    return result;
+}
+
+
+int * ObjListIterator_reset(ObjListIterator oli){
+    oli->nowNode = oli->list->head;
+    oli->index = 0;
+    return 0;
+}
+
+
+int * ObjListIterator_set(ObjListIterator oli, int index){
+    int delta = index - oli->index;
+    if (delta > 0) {
+        while (oli->nowNode && delta > 0){
+            oli->nowNode = oli->nowNode->next;
+            ++(oli->index);
+        }
+    }else{
+        oli->index = index;
+        oli->nowNode = ObjList_private_getNodeHandle(oli->list, index);
+    }
+    return 0;
+}
+
 
 /* Array List Part*/
 struct ArrayListSTU{

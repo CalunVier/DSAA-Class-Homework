@@ -41,6 +41,8 @@ int printList(List l);
 //ObjList(Single List)
 struct STUObjList;
 typedef struct STUObjList *ObjList;
+struct STUObjListIterator;
+typedef struct STUObjListIterator *ObjListIterator;
 ObjList newObjList(int byte_size);
 ObjList newObjListFromArray(void * array, int byte_size, int length);
 int ObjList_setObjSize(ObjList l, int size);
@@ -57,6 +59,12 @@ int ObjList_len(ObjList l);
 int ObjList_deepFree(ObjList l, int (* obj_free)(void *, ...));
 int ObjList_sort(ObjList l, int (* objCompare)(void *, void *));
 void * ObjList_toArray(ObjList l);
+
+ObjListIterator ObjList_getIterator(ObjList l);
+void * ObjListIterator_next(ObjListIterator oli);
+int * ObjListIterator_reset(ObjListIterator oli);
+int * ObjListIterator_set(ObjListIterator oli, int index);
+
 
 
 /* ArrayList Part */

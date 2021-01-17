@@ -161,14 +161,19 @@ void print_migong(MapVertex *_obj_map){
 }
 
 
-void findPath(DijkstraTable *table,MapVertex *obj_map,  int end){
+void findPath(DijkstraTable *table,MapVertex *obj_map, int end, ObjList path_list){
     DijkstraTable t;
+    MapVertex * vertex;
     t = table[obj_map[end].index_in_table];
     while (t.dist) {
-        ((MapVertex *)ObjList_get(t.header, 0))->distance = 3;
+        vertex = ((MapVertex *)ObjList_get(t.header, 0));
+        vertex->distance = 3;
+        ObjList_insert(path_list, vertex, 0);
         t = table[t.path];
     }
-    ((MapVertex*)ObjList_get(t.header, 0))->distance = 3;
+    vertex = ((MapVertex *)ObjList_get(t.header, 0));
+    vertex->distance = 3;
+    ObjList_insert(path_list, vertex, 0);
 }
 
 
@@ -176,8 +181,10 @@ int migong_main() {
     int migong_map[WEEK3_MIGONG_MIGONG_SIZE][WEEK3_MIGONG_MIGONG_SIZE];
     int y, x, temp1, start, end;
     int vertex_num = 0;
+    ObjList path_list;
+    ObjListIterator map_iterator;
     DijkstraTable *table;
-    MapVertex (*obj_map)[WEEK3_MIGONG_MIGONG_SIZE];
+    MapVertex (*obj_map)[WEEK3_MIGONG_MIGONG_SIZE], *vertex;
     random_init();
     for (y = 0; y < WEEK3_MIGONG_MIGONG_SIZE; ++y)
         for (x = 0; x < WEEK3_MIGONG_MIGONG_SIZE; ++x) {
@@ -213,7 +220,15 @@ int migong_main() {
     end = new_point_to_index(x, y);
     initTable(table, obj_map, vertex_num, start, readGraphFromIntegerMap);
     DijkstraInMap(table,vertex_num, findSmallestUnknownDistanceVertexInTable);
-    findPath(table, (MapVertex *)obj_map, end);
+    path_list = newObjList(sizeof(MapVertex));
+    findPath(table, (MapVertex *)obj_map, end, path_list);
     print_migong((MapVertex*)obj_map);
+
+    map_iterator = ObjList_getIterator(path_list);
+    vertex = ObjListIterator_next(map_iterator);
+    printf("(%d, %d, %d)", vertex->x, vertex->y, vertex->distance);
+    while (vertex = ObjListIterator_next(map_iterator)) {
+        printf("->(%d, %d, %d)", vertex->x, vertex->y, vertex->distance);
+    }
     return 0;
 }
