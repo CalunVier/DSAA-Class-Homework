@@ -209,6 +209,6 @@ int migong_main() {
     initTable(table, obj_map, vertex_num, start, readGraphFromIntegerMap);
     DijkstraInMap(table,vertex_num, findSmallestUnknownDistanceVertexInTable);
     findPath(table, (MapVertex *)obj_map, end);
-
+    print_migong((MapVertex*)obj_map);
     return 0;
 }
