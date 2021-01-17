@@ -161,6 +161,31 @@ void print_migong(MapVertex *_obj_map){
 }
 
 
+void print_migong_to_file(FILE* file, MapVertex* _obj_map) {
+    MapVertex(*obj_map)[WEEK3_MIGONG_MIGONG_SIZE] = (void*)_obj_map;
+    int y, x;
+    for (y = 0; y < WEEK3_MIGONG_MIGONG_SIZE; ++y) {
+        for (x = 0; x < WEEK3_MIGONG_MIGONG_SIZE; ++x) {
+            switch (obj_map[y][x].distance) {
+            case 0:
+                fprintf(file, "©–");
+                break;
+            case 1:
+                fprintf(file, "Ò¼");
+                break;
+            case 10:
+                fprintf(file, "Ê°");
+                break;
+            default:
+                fprintf(file, "V");
+                break;
+            }
+        }
+        fprintf(file, "\n");
+    }
+}
+
+
 void findPath(DijkstraTable *table,MapVertex *obj_map, int end, ObjList path_list){
     DijkstraTable t;
     MapVertex * vertex;
@@ -186,6 +211,7 @@ int migong_main() {
     ObjListIterator map_iterator;
     DijkstraTable *table;
     MapVertex (*obj_map)[WEEK3_MIGONG_MIGONG_SIZE], *vertex;
+    FILE* f = open("migong.txt","w+");
     random_init();
     for (y = 0; y < WEEK3_MIGONG_MIGONG_SIZE; ++y)
         for (x = 0; x < WEEK3_MIGONG_MIGONG_SIZE; ++x) {
@@ -212,6 +238,7 @@ int migong_main() {
     table = malloc(sizeof(DijkstraTable) * vertex_num);
     obj_map = (void *)transportIntegerMap2ObjMap(migong_map);
     print_migong((MapVertex *)obj_map);
+    print_migong_to_file(f, (MapVertex*)obj_map);
     //read
     printf("Please input the start point(x y):");
     scanf("%d %d", &x, &y);
@@ -228,8 +255,10 @@ int migong_main() {
     map_iterator = ObjList_getIterator(path_list);
     vertex = ObjListIterator_next(map_iterator);
     printf("(%d, %d, %d)", vertex->x, vertex->y, vertex->distance);
+    print_migong_to_file(f, (MapVertex*)obj_map);
     while (vertex = ObjListIterator_next(map_iterator)) {
         printf("->(%d, %d, %d)", vertex->x, vertex->y, vertex->distance);
     }
+    printf("The total path distance is:", ((MapVertex*)obj_map)[end].distance);
     return 0;
 }

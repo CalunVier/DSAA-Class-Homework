@@ -641,8 +641,9 @@ ObjListIterator ObjList_getIterator(ObjList l){
 
 
 void * ObjListIterator_next(ObjListIterator oli){
-    void * result = oli->nowNode;
+    void* result = NULL;
     if(oli->nowNode){
+        result = oli->nowNode->value;
         ++(oli->index);
         oli->nowNode = oli->nowNode->next;
     }
