@@ -31,7 +31,7 @@ int new_point_to_index(int x, int y)
     return y * WEEK3_MIGONG_MIGONG_SIZE + x;
 }
 
-void initTable(DijkstraTable *table, void *graph, int vertex_number, int start, void (*readGraph)(void *, DijkstraTable *)) {
+void initTable(DijkstraTable *table, void *graph, int vertex_number, void (*readGraph)(void *, DijkstraTable *)) {
     int i;
     readGraph(graph, table);
     for (i = 0; i < vertex_number; i++) {
@@ -39,7 +39,6 @@ void initTable(DijkstraTable *table, void *graph, int vertex_number, int start, 
         table[i].known = 0;
         table[i].path = -1;
     }
-    table[start].dist = 0;
 }
 
 MapVertex *transportIntegerMap2ObjMap(int (*_int_map)[]) {
@@ -72,7 +71,7 @@ void readGraphFromIntegerMap(void * _int_map, DijkstraTable *table) {
                 obj_map[y][x].index_in_table = v - 1;
             }
 
-            if (y - 1 > 0 && obj_map[y - 1][x].distance != 0) {
+            if (y - 1 >= 0 && obj_map[y - 1][x].distance != 0) {
                 // up
                 ObjList_append(temp_list, &obj_map[y - 1][x]);
             }
@@ -80,7 +79,7 @@ void readGraphFromIntegerMap(void * _int_map, DijkstraTable *table) {
                 // down
                 ObjList_append(temp_list, &obj_map[y + 1][x]);
             }
-            if (x - 1 > 0 && obj_map[y][x - 1].distance != 0) {
+            if (x - 1 >= 0 && obj_map[y][x - 1].distance != 0) {
                 //left
                 ObjList_append(temp_list, &obj_map[y][x - 1]);
             }
@@ -93,9 +92,10 @@ void readGraphFromIntegerMap(void * _int_map, DijkstraTable *table) {
 }
 
 
-void DijkstraInMap(DijkstraTable *table, int vertex_number, int(*smallest)(DijkstraTable *, int)){
+void DijkstraInMap(DijkstraTable *table, int vertex_number, int start, int(*smallest)(DijkstraTable *, int)){
     int i, si;
     MapVertex * temp_vertex, *vertex;
+    table[start].dist = 0;
     for(;;){
         si = smallest(table, vertex_number);
         if (si == -1) break;
@@ -165,6 +165,7 @@ void findPath(DijkstraTable *table,MapVertex *obj_map, int end, ObjList path_lis
     DijkstraTable t;
     MapVertex * vertex;
     t = table[obj_map[end].index_in_table];
+    if (t.dist == MAX_INT) return;
     while (t.dist) {
         vertex = ((MapVertex *)ObjList_get(t.header, 0));
         vertex->distance = 3;
@@ -218,8 +219,8 @@ int migong_main() {
     printf("Please input the end point(x y):");
     scanf("%d %d", &x, &y);
     end = new_point_to_index(x, y);
-    initTable(table, obj_map, vertex_num, start, readGraphFromIntegerMap);
-    DijkstraInMap(table,vertex_num, findSmallestUnknownDistanceVertexInTable);
+    initTable(table, obj_map, vertex_num, readGraphFromIntegerMap);
+    DijkstraInMap(table,vertex_num, ((MapVertex *)obj_map)[start].index_in_table, findSmallestUnknownDistanceVertexInTable);
     path_list = newObjList(sizeof(MapVertex));
     findPath(table, (MapVertex *)obj_map, end, path_list);
     print_migong((MapVertex*)obj_map);

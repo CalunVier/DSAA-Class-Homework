@@ -635,13 +635,13 @@ ObjListIterator ObjList_getIterator(ObjList l){
     ObjListIterator oli = malloc(sizeof(struct STUObjListIterator));
     oli->list = l;
     oli->nowNode = l->head;
-    oli->nowNode = 0;
+    oli->index = 0;
     return oli;
 }
 
 
 void * ObjListIterator_next(ObjListIterator oli){
-    int result = oli->nowNode;
+    void * result = oli->nowNode;
     if(oli->nowNode){
         ++(oli->index);
         oli->nowNode = oli->nowNode->next;
