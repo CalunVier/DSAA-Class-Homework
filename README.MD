@@ -39,7 +39,7 @@ Note:
 - Both ArrayQueue and ListQueue are available.
 - Sort.c may rely on object.c to provide data types, which comes from the ancient OOP project. It can be reused with slight modifications, but can only be used for basic types. There is a quick sort function(ObjList_sort()) available in ObjList. It can be used instead of the sorting algorithm at this stage.  
 
-The naming convention of this project:  
+## The naming convention of this project:  
 - Contains basic object-oriented ideas
 - In general, the class name uses the camel case nomenclature with the first letter capitalized. OOP-based functions use camel case nomenclature with lowercase initials.
 - The member functions of the class use an underscore(_) to connect the class name and the function name, with the class name first. In general, the first parameter is the self-directed use of the object.
