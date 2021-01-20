@@ -248,6 +248,7 @@ int migong_main() {
     printf("Please input the end point(x y):");
     scanf("%d %d", &x, &y);
     fprintf(f, "Please input the end point(x y):%d %d\n", x, y);
+    printf("\n");
     end = new_point_to_index(x, y);
     initTable(table, obj_map, vertex_num, readGraphFromIntegerMap);
     DijkstraInMap(table,vertex_num, ((MapVertex *)obj_map)[start].index_in_table, findSmallestUnknownDistanceVertexInTable);
